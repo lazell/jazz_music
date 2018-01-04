@@ -1,0 +1,8 @@
+# Ignore the following data files
+
+/music_downloads/*
+/metadata_downloads/*
+/Scraped_data_archive/*
+/jazz_on_line/jazz_on_line/Data/*
+/Images/*
+error.txt
