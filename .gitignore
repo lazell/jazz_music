@@ -5,4 +5,5 @@
 /Scraped_data_archive/*
 /jazz_on_line/jazz_on_line/Data/*
 /Images/*
+*.ipynb
 error.txt

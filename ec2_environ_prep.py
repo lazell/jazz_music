@@ -33,7 +33,7 @@ def set_aws_keys():
     os.system("aws configure")
 
 if __name__ == "__main__":
-    py_libraries = ["pause", "StringIO","urlib2"]
+    py_libraries = ["pause", "StringIO"]
 
     aws = str(raw_input("Do you need to access AWS services? (y/n)"))
 

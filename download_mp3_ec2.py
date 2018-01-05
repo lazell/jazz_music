@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-import urllib2
+import requests
 import random
 import pause
 import os
@@ -49,7 +49,7 @@ def clean_download_list(df_download):
 
 
 def download_mp3(df, start, stop):
-    
+
     #Check batch size is no larger than 100
     if stop-start > 100:
         print "batch is too large"
@@ -59,12 +59,13 @@ def download_mp3(df, start, stop):
         for mp3, name in zip(df['Link'][start:stop], df['filename'][start:stop]):
             try:
                 #Set User-Agent
-                req = urllib2.Request(mp3, headers={ 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36' })
+                #req = urllib2.Request(mp3, headers={ 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36' })
 
                 #open mp3 URL for song, download & save
-                mp3file = urllib2.urlopen(mp3)
+                #mp3file = urllib2.urlopen(mp3)
+                mp3file = requests.get(mp3)
                 with open('music_downloads/{}.mp3'.format(name),'wb') as output:
-                    output.write(mp3file.read())
+                    output.write(mp3file.content)
 
                 #Add mp3 file name to list
                 downloaded_mp3s.append("{}.mp3".format(name))
