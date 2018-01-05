@@ -9,20 +9,14 @@ from boto import connect_s3
 from StringIO import StringIO
 
 
-"""Takes csv url path file containing links to mp3 download,
-    filters for duplicate links, generates a uniqueID filename
-    and saves mp3s in 'music_downloads' directory
-    Also returns a list of dead links to error.txt file
-
+"""
     1. Gets CSV from E3 bucket
     2. Cleans CSV (removes duplicates creates unique file ID names)
     3. Downloads mp3 in batches (batch size <=100)
     4. Transfers batch of mp3s to E3 bucket
-    3. Deletes mp3s from local drive
+    5. Deletes mp3s from local drive
     """
 
-# Completed: clean_download_list, download_mp3
-# WIP: transfer_to_s3, main, delete_mp3_from_local
 
 def get_csv_from_s3(bucket,csv_path):
 
@@ -30,7 +24,7 @@ def get_csv_from_s3(bucket,csv_path):
     access_key = os.environ['AWS_ACCESS_KEY_ID']
     secret_key = os.environ['AWS_SECRET_ACCESS_KEY']
 
-    conn =  boto.connect_s3(access_key,secret_key)
+    conn =  connect_s3(access_key,secret_key)
     bucket = conn.get_bucket('swingmusic001')
     content = bucket.get_key(csv_path).get_contents_as_string()
 
@@ -93,7 +87,6 @@ def transfer_to_s3(downloaded_mp3s):
     #Transfer data to s3
     for mp3_file_name in downloaded_mp3s:
         bucket_and_path = 'swingmusic001/music_downloads/{}'.format(mp3_file_name)
-
         try:
             #transfering to
             os.system('aws s3 cp music_downloads/{} s3://{}'.format(mp3_file_name, bucket_and_path)) # AWS Command line for copying file to S3 bucket
@@ -103,14 +96,15 @@ def transfer_to_s3(downloaded_mp3s):
 
 
 def delete_mp3_from_local(downloaded_mp3s):
-    pass
+    for mp3 in downloaded_mp3s:
+        os.system("rm music_downloads/{}".format(mp3))
+    print "{} mp3 files removed from local".format(len(downloaded_mp3s))
 
 
 if __name__ == '__main__':
-    csv_file = get_csv(str(raw_input("Enter csv URL"))
-    bucket, csv_path = ######
+    bucket, csv_path = "swingmusic001", "metadata/Swing_Dance_Style_Master_DownloadC.csv"
     df = get_csv_from_s3(bucket,csv_path)
-    df_downloads =  clean_download_list(csv_file)
+    df_downloads =  clean_download_list(df)
 
     cont = 'y'
     start = int(raw_input("Enter start row:"))
@@ -118,7 +112,8 @@ if __name__ == '__main__':
 
     while cont == 'y':
         downloaded_mp3s = download_mp3(df_downloads, start, stop)
-        transfer_to_ec2(downloaded_mp3s)
+        transfer_to_s3(downloaded_mp3s)
+        delete_mp3_from_local(downloaded_mp3s)
         cont = raw_input("Continue to download next batch? (y/n)")
         if cont == 'y':
             start = stop
