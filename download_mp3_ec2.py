@@ -15,6 +15,7 @@ from StringIO import StringIO
     3. Downloads mp3 in batches (batch size <=100)
     4. Transfers batch of mp3s to E3 bucket
     5. Deletes mp3s from local drive
+
     """
 
 
@@ -48,7 +49,7 @@ def clean_download_list(df_download):
 
 
 def download_mp3(df, start, stop):
-
+    
     #Check batch size is no larger than 100
     if stop-start > 100:
         print "batch is too large"
