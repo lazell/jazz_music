@@ -18,6 +18,10 @@ def install_dependancies(py_libraries, aws_):
     #Install AWS command Line Interface
     if aws_ :
         os.system("pip install awscli")
+    #Create subfolders
+    os.system ("mkdir music_downloads")
+    os.system ("mkdir error_log")
+    os.system ("touch error_log/error.txt")
 
 
 def git_clone_repo(repo_url):
@@ -41,8 +45,9 @@ if __name__ == "__main__":
             py_libraries.append("boto")
             print "Configure AWS access keys.. \n"
             set_aws_keys()
-            print "If you are using boto for AWS access, you may need to configure the root .bash_profile "
+            print "If you are using boto for AWS access, you may need to configure and re-run .bashrc "
             install_dependancies(py_libraries, aws_=True)
+
 
     else:
         install_dependancies(py_libraries, aws_=False)
