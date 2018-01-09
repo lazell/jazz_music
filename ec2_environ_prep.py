@@ -1,13 +1,12 @@
 import os
 
+
 """
 1. Installs python libraraies
 2. Installs aws cli (if needed)
 3. Sets up AWS credentials with aws configure (if needed)
 4. Git clone project repo
 """
-
-import os
 
 
 def install_dependancies(py_libraries, aws_):
