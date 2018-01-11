@@ -41,7 +41,7 @@ def create_subset_dataframe():
 
     #Add filename reference to dataframe
     df_melspec['filename'] = df_melspec[0].map(lambda x: x[:-14])
-    df_arr = np.array(df_micro['mel-spec-array']
+    df_arr = np.array(df_micro['mel-spec-array'])
     arr = np.stack(df_arr)
 
     df_subset = df_melspec.merge(df,how='left', on='filename')
