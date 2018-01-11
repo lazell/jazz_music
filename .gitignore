@@ -11,5 +11,7 @@
 /micro_subset/*
 /s3_list.txt
 /upload_wav__to_s3.csv
+/CNN_Models
+/processed_data
 *.ipynb
 error.txt

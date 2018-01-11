@@ -33,6 +33,7 @@ def preprocess_data(X,Y,reduce_to=0):
 
     return X, Y
 
+
 def test_train_split(X,Y,proportion=0.8):
     # Get index of split
     split = int(round(len(X)*proportion,0))
@@ -97,12 +98,12 @@ def save_model_and_metrics(model, history, run_time_s):
 
     # Save weights to HDF5
     model.save_weights(filename + ".h5")
-    print("Saved model to disk")
+    print("Saved model to disk \n")
 
     #Save Params
     with open(filename + "-params.txt", "w") as param_file:
-          param_file.write(history.params)
-          param_file.write("Run time (seconds): {}".format(run_time_s)
+          param_file.write(str(history.params))
+          param_file.write("Run time (seconds): {}".format(run_time_s))
 
 
 class AccuracyHistory(keras.callbacks.Callback):
@@ -117,7 +118,7 @@ if __name__ == '__main__':
     os.system("mkdir CNN_Models")
     X, Y = preprocess_data(raw_input("Enter url for X.npy :"),
                            raw_input("Enter url for Y.npy:"),
-                           int(raw_input("Limit samples to n? if yes enter number (int), if no enter 0:\n)))
+                           int(raw_input("Limit samples to n? if yes enter number (int), if no enter 0:")))
 
     X_train, y_train, X_test, y_test = test_train_split(X,Y,float(raw_input("Enter train/test proportion (e.g. 0.8):")))
 
@@ -151,13 +152,13 @@ if __name__ == '__main__':
     else:
         print 1.*run_time_s/60, " Minutes to run model"
 
-
+    print "Close chart to continue"
     plt.plot(range(1, epochs+1), history.acc)
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.show()
-    print "Close chart to continue"
 
     save = raw_input("Would you like to save this model & it's metrics? (y/n): ")
+
     if save == 'y':
         save_model_and_metrics(model, history, run_time_s)
