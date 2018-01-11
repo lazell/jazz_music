@@ -23,7 +23,7 @@ def download_melspecs():
             file_path = mel-spec
             file_path = filepath.split("/")[:-1]
             dir_ = "/".join(file_path)
-            get_npy_from_s3(bucket,file_path, dir_):
+            get_npy_from_s3(bucket,file_path, dir_)
 
 
 def get_3D_array_resize(arr_name):
