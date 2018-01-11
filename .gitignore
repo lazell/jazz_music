@@ -5,5 +5,11 @@
 /Scraped_data_archive/*
 /jazz_on_line/jazz_on_line/Data/*
 /Images/*
+/MelSpec/*
+/wav_samples/*
+/to_s3/*
+/micro_subset/*
+/s3_list.txt
+/upload_wav__to_s3.csv
 *.ipynb
 error.txt
