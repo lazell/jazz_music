@@ -8,13 +8,13 @@ from ec2_download_data import get_npy_from_s3
 
 
 def list_melspec():
-# Create List of Mel-Spec array files
-os.system("python get_bucket_files.py > s3_files.txt")
-with open("s3_files.txt","r") as f:
-    for line in f:
-        with open("mel_spec_files.csv", "w") as arrays:
-            if line[-10:] == "MelArr.npy":
-                arrays.write(line)
+    # Create List of Mel-Spec array files
+    os.system("python get_bucket_files.py > s3_files.txt")
+    with open("s3_files.txt","r") as f:
+        for line in f:
+            with open("mel_spec_files.csv", "w") as arrays:
+                if line[-10:] == "MelArr.npy":
+                    arrays.write(line)
 
 def download_melspecs():
     with open("mel_spec_files.csv", "w") as arrays:
