@@ -2,7 +2,7 @@ import os
 
 
 """
-1. Installs python libraraies
+1. Installs python libraies
 2. Installs aws cli (if needed)
 3. Sets up AWS credentials with aws configure (if needed)
 4. Git clone project repo
@@ -36,7 +36,7 @@ def set_aws_keys():
     os.system("aws configure")
 
 if __name__ == "__main__":
-    py_libraries = ["pause", "StringIO"]
+    py_libraries = ["pause", "StringIO", "time"]
 
     aws = str(raw_input("Do you need to access AWS services? (y/n)"))
 

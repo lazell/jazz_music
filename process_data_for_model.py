@@ -11,16 +11,17 @@ def list_melspec():
     # Create List of Mel-Spec array files
     os.system("python get_bucket_files.py > s3_files.txt")
     with open("s3_files.txt","r") as f:
-        for line in f:
+        for i, line in enumerate(f):
             with open("mel_spec_files.csv", "w") as arrays:
-                if line[-10:] == "MelArr.npy":
-                    arrays.write(line)
+                if i < 4:
+                    if line[-10:] == "MelArr.npy":
+                        arrays.write(line)
 
 def download_melspecs():
-    with open("mel_spec_files.csv", "w") as arrays:
-        for mel-spec in array:
+    with open("mel_spec_files.csv", "wr") as arrays:
+        for melspec in arrays:
             bucket = 'swingmusic001'
-            file_path = mel-spec
+            file_path = melspec
             file_path = filepath.split("/")[:-1]
             dir_ = "/".join(file_path)
             get_npy_from_s3(bucket,file_path, dir_)
@@ -35,13 +36,13 @@ def get_3D_array_resize(arr_name):
     return arr
 
 
-def create_subset_dataframe():
+def create_subset_dataframe(df):
     # Create merged dataframe (matching arrays to their metadata)
     df_melspec = pd.read_csv('mel_spec_files.csv', header=None)
 
     #Add filename reference to dataframe
     df_melspec['filename'] = df_melspec[0].map(lambda x: x[:-14])
-    df_arr = np.array(df_micro['mel-spec-array'])
+    df_arr = np.array(df['mel-spec-array'])
     arr = np.stack(df_arr)
 
     df_subset = df_melspec.merge(df,how='left', on='filename')
@@ -62,7 +63,7 @@ def create_X_and_Y_arrays(df,X_col_label, Y_col_label):
 
 if __name__ == '__main__':
     #Get Metadata CSV file
-    df = pd.read_csv(str(raw_input("Enter csv file path:"))
+    df = pd.read_csv(str(raw_input("Enter metadata csv file path:")))
     print df.describe(), "/n"
     print df.head(15)
 

@@ -9,6 +9,7 @@
 /wav_samples/*
 /to_s3/*
 /micro_subset/*
+/s3_lists.txt
 /s3_list.txt
 /upload_wav__to_s3.csv
 /CNN_Models

@@ -14,8 +14,8 @@ import time
 
 def preprocess_data(X,Y,reduce_to=0):
     #Import Data
-    X = np.load(X)
-    Y = np.load(Y)
+    X = np.load(X)['arr_0']
+    Y = np.load(Y)['arr_0']
 
     if reduce_to != 0:
         #Reduce to data points
@@ -27,10 +27,20 @@ def preprocess_data(X,Y,reduce_to=0):
     Y = Y.fillna('None')
     Y = np.array(Y[0])
 
-    #Convert Y's to binary categories
-    encoder = LabelBinarizer()
-    Y = encoder.fit_transform(Y)
+    print "Y data: {}".format(Y[:10])
+    print "X data: {}".format(X[0, :, :, :])
 
+    binarize = str(raw_input("Do you need to binarize categories? (y/n):"))
+    if binarize == 'y':
+
+        #Convert Y's to binary categories
+        encoder = LabelBinarizer()
+        Y = encoder.fit_transform(Y)
+    else:
+        #Transform
+        Y = np.reshape(Y,(len(Y),1))
+
+    print X.shape, Y.shape
     return X, Y
 
 
@@ -45,43 +55,49 @@ def test_train_split(X,Y,proportion=0.8):
     y_train = Y[:split]
     y_test = Y[split:]
 
-    print "X_train shape: {}\n y_train shape: {}\n X_test shape: {}\n y_test shape: {}\n".format(X_train.shape,
-                                                                                                 y_train.shape,
-                                                                                                 X_test.shape,
-                                                                                                 y_test.shape)
-    return X_train, y_train, X_test, y_test
+    print "X_train shape: {}\n y_train shape: {}\n X_test shape: {}\n y_test shape: {}".format(X_train.shape,y_train.shape, X_test.shape, y_test.shape)
 
     #Define Input Shape of each sample
-    input_shape = (128, 1292, 1)
+    input_shape = (X.shape[1], X.shape[2], X.shape[3])
+
+    return X_train, y_train, X_test, y_test, input_shape
 
 
+def Model(num_classes, input_shape):
 
-def Model(num_classes):
-
-
-    #Define Input Shape of each sample
-    input_shape = (128, 1292, 1)
 
     #Generate Model
     model = Sequential()
 
-    #Input Layer
-    model.add(Conv2D(120, kernel_size=(3, 3), strides=(1, 1),
-                     activation='softmax',
+    #Input layer
+    model.add(Conv2D(128, kernel_size=(3, 3), strides=(1, 1),
+                     activation='relu',
                      input_shape=input_shape))
-
     model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
 
-    model.add(Conv2D(64, (3, 3), activation='softmax'))
-    model.add(MaxPooling2D(pool_size=(2, 4)))
+    model.add(Conv2D(384, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 5)))
+
+    model.add(Conv2D(768, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 8)))
+
+    model.add(Conv2D(2048, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 8)))
+
 
     model.add(Flatten())
-    model.add(Dense(1000, activation='softmax'))
+    model.add(Dense(128, activation='sigmoid'))
 
     #Output layer
     model.add(Dense(num_classes, activation='softmax'))
 
-    model.compile(loss=keras.losses.categorical_crossentropy,
+    binary = int(raw_input("how many columns for y-matrix? (e.g. 6):"))
+    if binary < 1:
+        loss_type = keras.losses.categorical_crossentropy
+    else:
+        loss_type = keras.losses.mean_squared_error
+
+    model.compile(loss=loss_type,
                   optimizer=keras.optimizers.Adam(),
                   metrics=['accuracy'])
     return model
@@ -92,7 +108,7 @@ def fit(model, X_train,y_train, batch_size, epochs):
 def save_model_and_metrics(model, history, run_time_s):
     # Save model to JSON
     model_json = model.to_json()
-    filename = "CNN_Models/model-{}".format(str(raw_input("Enter Model ID in numeric format (e.g. 001)")))
+    filename = "CNN_Models/model-{}".format(str(raw_input("Enter Model ID in numeric format (e.g. 001): ")))
     with open(filename + ".json", "w") as json_file:
         json_file.write(model_json)
 
@@ -120,13 +136,13 @@ if __name__ == '__main__':
                            raw_input("Enter url for Y.npy:"),
                            int(raw_input("Limit samples to n? if yes enter number (int), if no enter 0:")))
 
-    X_train, y_train, X_test, y_test = test_train_split(X,Y,float(raw_input("Enter train/test proportion (e.g. 0.8):")))
+    X_train, y_train, X_test, y_test, input_shape = test_train_split(X,Y,float(raw_input("Enter train/test proportion (e.g. 0.8):")))
 
     batch_size = int(raw_input("Enter batch size (int) :"))
     num_classes = y_train.shape[1]
     epochs = int(raw_input("Enter number of epochs (int) :"))
 
-    model = Model(num_classes)
+    model = Model(num_classes, input_shape)
     history = AccuracyHistory()
 
     # Record model start time
@@ -158,7 +174,4 @@ if __name__ == '__main__':
     plt.ylabel('Accuracy')
     plt.show()
 
-    save = raw_input("Would you like to save this model & it's metrics? (y/n): ")
-
-    if save == 'y':
-        save_model_and_metrics(model, history, run_time_s)
+    save_model_and_metrics(model, history, run_time_s)

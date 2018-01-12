@@ -17,7 +17,7 @@ def get_npy_from_s3(bucket,file_path, dir_):
     try:
         os.system("mkdir {}".format(dir_))
     except:
-        continue
+        pass
     conn =  connect_s3(access_key,secret_key)
     bucket = conn.get_bucket(bucket)
     try:
