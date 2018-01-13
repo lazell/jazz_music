@@ -75,16 +75,19 @@ def Model(num_classes, input_shape):
                      input_shape=input_shape))
     model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
 
+    #Hidden Layer 1
     model.add(Conv2D(384, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 5)))
 
+    #Hidden Layer 2
     model.add(Conv2D(768, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
 
-    model.add(Conv2D(2048, (3, 3), activation='relu'))
+    #Hidden Layer 3
+    model.add(Conv2D(1536, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
 
-
+    #Hidden Layer 4
     model.add(Flatten())
     model.add(Dense(128, activation='sigmoid'))
 

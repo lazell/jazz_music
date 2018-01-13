@@ -9,37 +9,6 @@ import os
 
 ## !!!! Refactor this into a Class
 
-def create_feature_cols(csv_file):
-
-    df = pd.read_csv(csv_file)
-
-
-    #Determine Superlikes
-    yes = df['Superlike'].unique()[1:]
-    df['Superlike_True'] = df['Superlike'].map(lambda x: 1 if x in yes else 0)
-
-    #Determine Danceability & Swing-Dancablity
-    df['Swing_Danceable'] = df['Style-Katie'].map(lambda x: 1 if x != 'None' else 0)
-    df['Other_Danceable'] = df['Notes'].map(lambda x: 1 if x in ['other', 'latin', 'bluegrass', 'country'] else 0)
-    df['Danceable'] = df['Swing_Danceable']+ df['Other_Danceable']
-
-    #Identify swing-dancible but not so great songs
-
-    df['Not_Great'] = df['Notes'].map(lambda x: 1 if x in ['not great', 'not good'] else 0)
-    df['Poor_Quality_Recording'] = df['Notes'].str.contains('quality', 'Quality')
-
-    #Drop NaN
-    df = df.dropna(subset=['ID'])
-
-    # Generate filename
-    df['IDx'] = df['ID'].map(lambda x: int(x))
-    df['Style-Katie'] = df['Style-Katie'].replace('Lindy Hop', 'Lindy')
-    df['filename'] = (df['IDx'].astype(str)
-                              .str.zfill(4)
-                              + '-' +
-                              df['Style-Katie'])
-    print df.head()
-    return df
 
 
 
@@ -52,7 +21,6 @@ def song_samples(splits,duration,song_mp3,skip=20):
     """
 
     #def song_stats(splits,duration,song_mp3,skip=30)
-    import pdb; pdb.set_trace()
     song = AudioSegment.from_file(song_mp3)
     song_duration = (song.duration_seconds - skip)/splits
     # print song.duration_seconds
@@ -158,7 +126,7 @@ def split_rule(df,song_id):
 
 if __name__ == '__main__':
     csv_file = str(raw_input("Enter csv_file to process:"))
-    df = create_feature_cols(csv_file)
+    df = pd.read(csv_file)
     start = int(raw_input("Enter start row:"))
     stop = int(raw_input("Enter stop row:"))
     os.system("mkdir music_downloads/wav_samples")
@@ -172,7 +140,6 @@ if __name__ == '__main__':
             song_mp3 = "music_downloads/" + str(df['filename'].loc[song_id]) + ".mp3"
             print song_mp3
             splits = split_rule(df,song_id)
-            print splits
             try:
                 song_samples(splits,30,song_mp3,skip=30)
             except:

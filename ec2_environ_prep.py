@@ -39,6 +39,14 @@ if __name__ == "__main__":
     py_libraries = ["pause", "StringIO", "time"]
 
     aws = str(raw_input("Do you need to access AWS services? (y/n)"))
+    audio_lib = str(raw_input("Do you need audio libraries? (y/n)"))
+
+    if audio_lib == 'y':
+            py_libraries.append("pydub")
+            py_libraries.append("lbrosa")
+            os.system("sudo apt-get install libav-tools")
+            os.system("sudo apt-get install ffmpeg")
+
 
     if aws == "y":
             py_libraries.append("boto")
@@ -47,9 +55,7 @@ if __name__ == "__main__":
             print "If you are using boto for AWS access, you may need to configure and re-run .bashrc "
             install_dependancies(py_libraries, aws_=True)
 
-
     else:
         install_dependancies(py_libraries, aws_=False)
-        git_clone_repo(raw_input("Enter git repo URL: "))
 
     print "\n All set!"
