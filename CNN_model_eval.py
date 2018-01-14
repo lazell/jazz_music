@@ -3,9 +3,10 @@ import pandas as pd
 
 import keras
 from keras.datasets import mnist
-from keras.layers import Dense, Flatten
+from keras.layers import Dense, Flatten, Dropout
 from keras.layers import Conv2D, MaxPooling2D
 from keras.models import Sequential
+from keras.layers.normalization import BatchNormalization
 from sklearn.preprocessing import LabelBinarizer
 import matplotlib.pylab as plt
 
@@ -27,6 +28,7 @@ def preprocess_data(X,Y,reduce_to=0):
     Y = Y.fillna('None')
     Y = np.array(Y[0])
 
+
     print "Y data: {}".format(Y[:10])
     print "X data: {}".format(X[0, :, :, :])
 
@@ -36,9 +38,6 @@ def preprocess_data(X,Y,reduce_to=0):
         #Convert Y's to binary categories
         encoder = LabelBinarizer()
         Y = encoder.fit_transform(Y)
-    else:
-        #Transform
-        Y = np.reshape(Y,(len(Y),1))
 
     print X.shape, Y.shape
     return X, Y
@@ -74,22 +73,28 @@ def Model(num_classes, input_shape):
                      activation='relu',
                      input_shape=input_shape))
     model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
+    model.add(BatchNormalization(axis=1))
+    model.add(Dropout(0.3))
 
     #Hidden Layer 1
     model.add(Conv2D(384, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 5)))
+    model.add(Dropout(0.3))
 
     #Hidden Layer 2
     model.add(Conv2D(768, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
+    model.add(Dropout(0.3))
 
     #Hidden Layer 3
-    model.add(Conv2D(1536, (3, 3), activation='relu'))
+    model.add(Conv2D(2048, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
+    model.add(Dropout(0.3))
 
     #Hidden Layer 4
     model.add(Flatten())
-    model.add(Dense(128, activation='sigmoid'))
+    model.add(Dense(128, activation='relu'))
+    model.add(Dropout(0.1))
 
     #Output layer
     model.add(Dense(num_classes, activation='softmax'))

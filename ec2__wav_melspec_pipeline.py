@@ -11,12 +11,12 @@ def download_mps(csv, bucket_name, start, stop):
     with open(csv) as f:
         for i, line in enumerate(f):
             if i in range(start,stop):
-                os.system('aws s3 cp s3://{}/music_downloads/{} music_downloads/{}'.format(bucket_name,line.strip(), line.s.strip())
+                os.system('aws s3 cp s3://{}/music_downloads/{} music_downloads/{}'.format(bucket_name,line.strip(), line.s.strip()))
 
 def get_list(folder,list_filename):
     # Navigate to  folder and get list of files
-    os.system('cd {}').format(folder)
-    os.system('ls > {}').format(list_filename)
+    os.system('cd {}'.format(folder))
+    os.system('ls > {}'.format(list_filename))
 
 def run_mp3_sampling(csv_file, start, stop):
         df = mp3.create_feature_cols(csv_file)
@@ -43,10 +43,12 @@ if __name__ == '__main__':
     start = int(raw_input("start row:"))
     stop = int(raw_input("stop row:"))
 
+    # Download mp3s
+    download_mps(csv, bucket_name, start, stop)
+
     # Navigate to music_downloads folder and generate list of files
-    get_list('music_downloads', wav_files_for_s3_transfer.txt)
+    get_list('music_downloads', 'wav_files_for_s3_transfer.txt')
 
     #Generate wav files
     csv_file = str(raw_input("Enter csv_file (dataframe metadata) to process:"))
     run_mp3_sampling(csv_file, start, stop)
-    

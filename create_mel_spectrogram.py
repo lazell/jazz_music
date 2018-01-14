@@ -24,7 +24,8 @@ def mel_spectrogram(filename, save_type):
             np.save('{}-MelArr'.format(filename[:-4]), log_S)
             print '{}-MelArr.npy saved '.format(filename[:-4])
         except:
-            print "{} did not save"
+            print "{} did not save".format(filename[:-4])
+
 
 
 

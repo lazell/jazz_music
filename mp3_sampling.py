@@ -52,7 +52,7 @@ def song_samples(splits,duration,song_mp3,skip=20):
     """
 
     #def song_stats(splits,duration,song_mp3,skip=30)
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     song = AudioSegment.from_file(song_mp3)
     song_duration = (song.duration_seconds - skip)/splits
     # print song.duration_seconds
