@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from pydub import AudioSegment
 import os
 
-from ec2_wav_pipeline import create_directories_and_text_files, download_mps
+
 #from download_mp3_ec2 import transfer_df_to_s3
 
 
@@ -91,6 +91,11 @@ def get_chroma_data(filename, y, sr):
 
     return df_pitch
 
+def download_mps(csv, bucket_name, start, stop):
+    with open(csv) as f:
+        for i, line in enumerate(f):
+            if i in range(start,stop):
+                os.system('aws s3 cp s3://{}/{}'.format(bucket_name, line.strip()))
 
 
 
