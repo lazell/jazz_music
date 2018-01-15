@@ -126,17 +126,15 @@ if __name__ == '__main__':
             for i, filename in enumerate(f):
                 if (i >= start) & (i < stop):
                     print "attempting feature extract for :", filename
-                    try:
-                        y, sr, df_audio_features= get_mp3_features(filename)
-                        print "mp3 featues work"
-                        df_pitch = get_chroma_data(filename, y, sr)
-                        print " chroma works"
-                        #Add data to dataframe
-                        df_c = df_c.append(df_pitch)
-                        df_c = df_c.merge(df_values, on='filename')
+                    y, sr, df_audio_features= get_mp3_features(filename)
+                    print "mp3 featues work"
+                    df_pitch = get_chroma_data(filename, y, sr)
+                    print " chroma works"
+                    #Add data to dataframe
+                    df_c = df_c.append(df_pitch)
+                    df_c = df_c.merge(df_values, on='filename')
 
-                    except:
-                        print "{} did not convert".format(filename)
+                    print "{} did not convert".format(filename)
 
 
 
