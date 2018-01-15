@@ -112,9 +112,7 @@ if __name__ == '__main__':
     cont = 'y'
     while cont == 'y':
         # Download mp3s
-        os.system("mkdir music_downloads")
-        downloaded_mp3s = download_mps(csv_list, bucket_name, start, stop)
-        os.system("cd music_downloads")
+        downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
 
         #Initialize dataframe
         chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
