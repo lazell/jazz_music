@@ -17,7 +17,7 @@ def get_mp3_features(filename):
         - root mean square energy per segment (mean, median, std)
 
     '''
-    print "Processing filename 2:", filename, "this may take a while ..."
+    print "Processing filename 2: " + filename + " this may take a while ..."
     try:
         # Load audio data
         y, sr = librosa.load(filename)
@@ -26,18 +26,21 @@ def get_mp3_features(filename):
         y_harmonic, y_percussive = librosa.effects.hpss(y)
         h_tempo, h_beats = librosa.beat.beat_track(y=y_harmonic, sr=sr)
         p_tempo, p_beats = librosa.beat.beat_track(y=y_percussive, sr=sr)
+        print "got tempo & beats"
 
         # Get Root Mean Squared Energy (avg, median & standard deviation)
-        rmse_arr = librosa.feature.rmse(y=y, sr=sr)
+        rmse_arr = librosa.feature.rmse(y=y)
         avg_rmse = rmse_arr.mean()
         med_rmse = np.ma.median(rmse_arr)
         std_rmse = rmse_arr.std()
+
+        print "got RMSEs"
 
         # Get length of song
         song = AudioSegment.from_file(filename)
         song_duration = song.duration_seconds
 
-
+        print "got song durations"
         # Append results to csv
         # with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
         #
@@ -55,7 +58,7 @@ def get_mp3_features(filename):
         return y, sr, df_values
 
     except:
-        print "{} was not able to be analyzed, data not saved".format(filename[:-4])
+        print "{} was not able to be analyzed, data not saved".format(filename)
 
 
 
