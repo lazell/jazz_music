@@ -126,7 +126,7 @@ if __name__ == '__main__':
             for i, filename in enumerate(f):
                 if (i >= start) & (i < stop):
                     print "attempting feature extract for :", filename
-                    y, sr, df_audio_features= get_mp3_features(filename.strip())
+                    y, sr, df_values = get_mp3_features(filename.strip())
                     print "mp3 featues work"
                     df_pitch = get_chroma_data(filename.strip(), y, sr)
                     print " chroma works"
