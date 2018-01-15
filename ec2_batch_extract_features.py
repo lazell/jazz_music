@@ -18,10 +18,10 @@ def get_mp3_features(filename):
 
     '''
     print "Processing filename 2: " + filename + " this may take a while ..."
-    try:
+    if True:
         # Load audio data
         y, sr = librosa.load(filename)
-
+        print "got tempo & beats"
         # Get Tempo & Beats
         y_harmonic, y_percussive = librosa.effects.hpss(y)
         h_tempo, h_beats = librosa.beat.beat_track(y=y_harmonic, sr=sr)
@@ -57,8 +57,8 @@ def get_mp3_features(filename):
 
         return y, sr, df_values
 
-    except:
-        print "{} was not able to be analyzed, data not saved".format(filename)
+
+        #print "{} was not able to be analyzed, data not saved".format(filename)
 
 
 
