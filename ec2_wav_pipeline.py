@@ -11,7 +11,7 @@ def download_mps(csv, bucket_name, start, stop):
     with open(csv) as f:
         for i, line in enumerate(f):
             if i in range(start,stop):
-                os.system('aws s3 cp s3://{}/music_downloads/{} music_downloads/{}'.format(bucket_name,line.strip(), line.strip()))
+                os.system('aws s3 cp s3://{}/music_downloads/{}music_downloads/{}'.format(bucket_name,line.strip(), line.strip()))
 
 def get_list(folder,list_filename):
     # Navigate to  folder and get list of files

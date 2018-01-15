@@ -97,8 +97,6 @@ def get_chroma_data(filename, y, sr):
 if __name__ == '__main__':
 
     count = 1
-    # Create directories
-    create_directories_and_text_files()
 
     # Enter download details
     bucket_name = str(raw_input("Enter bucket name:"))
@@ -109,8 +107,9 @@ if __name__ == '__main__':
     cont = 'y'
     while cont == 'y':
         # Download mp3s
+        os.system("mkdir music_downloads")
         downloaded_mp3s = download_mps(csv_list, bucket_name, start, stop)
-        os.system("")
+        os.system("cd music_downloads")
 
         #Initialize dataframe
         chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
