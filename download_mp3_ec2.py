@@ -51,7 +51,7 @@ def clean_download_list(df_download):
 def download_mp3(df, start, stop):
 
     #Check batch size is no larger than 100
-    if stop-start > 100:
+    if stop-start > 500:
         print "batch is too large"
     else:
         downloaded_mp3s = []
@@ -90,10 +90,10 @@ def transfer_to_s3(downloaded_mp3s):
     for mp3_file_name in downloaded_mp3s:
         bucket_and_path = 'swingmusic001/music_downloads/{}'.format(mp3_file_name)
         try:
-            #transfering to
-            os.system('aws s3 cp music_downloads/{} s3://{}'.format(mp3_file_name, bucket_and_path)) # AWS Command line for copying file to S3 bucket
-        except:
+            #Transfering to s3 bucket via AWS cli
+            os.system('aws s3 cp music_downloads/{} s3://{}'.format(mp3_file_name, bucket_and_path))
             #Failed to transfer mp3
+        except:
             print "Failed to transfer {} to S3".format(mp3_file_name)
 
 
