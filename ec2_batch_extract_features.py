@@ -17,30 +17,29 @@ def get_mp3_features(filename):
         - root mean square energy per segment (mean, median, std)
 
     '''
-    print "Processing filename 2: " + filename + " this may take a while ..."
-    if True:
+    print "Processing: " + filename + " this may take a while ..."
+    try:
         # Load audio data
         y, sr = librosa.load(filename)
-        print "got tempo & beats"
+        print "loading file.."
+
         # Get Tempo & Beats
         y_harmonic, y_percussive = librosa.effects.hpss(y)
         h_tempo, h_beats = librosa.beat.beat_track(y=y_harmonic, sr=sr)
         p_tempo, p_beats = librosa.beat.beat_track(y=y_percussive, sr=sr)
-        print "got tempo & beats"
+        print "Processed tempo & beats"
 
         # Get Root Mean Squared Energy (avg, median & standard deviation)
         rmse_arr = librosa.feature.rmse(y=y)
         avg_rmse = rmse_arr.mean()
         med_rmse = np.ma.median(rmse_arr)
         std_rmse = rmse_arr.std()
-
-        print "got RMSEs"
+        print "Procesed RMSEs"
 
         # Get length of song
         song = AudioSegment.from_file(filename)
         song_duration = song.duration_seconds
-
-        print "got song durations"
+        print "Processed durations"
         # Append results to csv
         # with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
         #
@@ -55,44 +54,48 @@ def get_mp3_features(filename):
         df_values = pd.DataFrame([filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]).transpose()
         df_values.columns = cols
 
+        print "Mp3 featues work!"
+
         return y, sr, df_values
-
-
-        #print "{} was not able to be analyzed, data not saved".format(filename)
+    except:
+        print "{} was not able to be analyzed, data not saved".format(filename)
 
 
 
 def get_chroma_data(filename, y, sr):
 
-    # Get Pitch percentages of song
-    chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+    try:
+        # Get Pitch percentages of song
+        chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
 
-    #Get chroma & reduce noise by using nearest neighbors with cosine similarity to reduce noise
-    chroma_med = librosa.decompose.nn_filter(chroma,
-                                     aggregate=np.median,
-                                     metric='cosine')
-    rec = librosa.segment.recurrence_matrix(chroma, mode='affinity',
-                                     metric='cosine', sparse=True)
+        #Get chroma & reduce noise by using nearest neighbors with cosine similarity to reduce noise
+        chroma_med = librosa.decompose.nn_filter(chroma,
+                                         aggregate=np.median,
+                                         metric='cosine')
+        rec = librosa.segment.recurrence_matrix(chroma, mode='affinity',
+                                         metric='cosine', sparse=True)
 
-    chroma_nlm = librosa.decompose.nn_filter(chroma, rec=rec,
-                                    aggregate=np.average)
-    pitch_scale = ['B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ']
-    values = []
+        chroma_nlm = librosa.decompose.nn_filter(chroma, rec=rec,
+                                        aggregate=np.average)
+        pitch_scale = ['B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ']
+        values = []
 
-    for i, pitch in enumerate(pitch_scale):
-            values.append(chroma_nlm[i].sum())
-    # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
-    pitch_values = values / sum(values)
+        for i, pitch in enumerate(pitch_scale):
+                values.append(chroma_nlm[i].sum())
+        # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
+        pitch_values = values / sum(values)
 
-    # Generate Dataframe of pitch features for song
-    df_pitch = pd.DataFrame(pitch_values).transpose()
-    df_pitch.columns = pitch_scale
-    df_pitch['filename'] = None
-    df_pitch['chroma_arr'] = None
-    df_pitch['filename'].iloc[0] = filename
-    df_pitch['chroma_arr'].iloc[0] = chroma_nlm
+        # Generate Dataframe of pitch features for song
+        df_pitch = pd.DataFrame(pitch_values).transpose()
+        df_pitch.columns = pitch_scale
+        df_pitch['filename'] = None
+        df_pitch['chroma_arr'] = None
+        df_pitch['filename'].iloc[0] = filename
+        df_pitch['chroma_arr'].iloc[0] = chroma_nlm
 
-    return df_pitch
+        return df_pitch
+    except:
+        print "Could not extract pitch features"
 
 def download_mp3s(csv, bucket_name, start, stop):
     with open(csv) as f:
@@ -117,7 +120,7 @@ if __name__ == '__main__':
         # Download mp3s
         downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
 
-        #Initialize dataframe
+        #Initialize pitch dataframe
         chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
         df_c = pd.DataFrame(columns=chroma_cols)
 
@@ -125,16 +128,17 @@ if __name__ == '__main__':
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
                 if (i >= start) & (i < stop):
-                    print "attempting feature extract for :", filename
+                    print "Attempting feature extract for :", filename
                     y, sr, df_values = get_mp3_features(filename.strip())
-                    print "mp3 featues work"
                     df_pitch = get_chroma_data(filename.strip(), y, sr)
-                    print " chroma works"
-                    #Add data to dataframe
-                    df_c = df_c.append(df_pitch)
-                    df_c = df_c.merge(df_values, on='filename')
+                    print "Chroma features fetched!"
 
-                    print "{} did not convert".format(filename)
+                    #Add data to dataframe
+                    try:
+                        df_c = df_c.append(df_pitch)
+                        df_c = df_c.merge(df_values, on='filename')
+                    except:
+                        print "{} did not convert".format(filename)
 
 
 
