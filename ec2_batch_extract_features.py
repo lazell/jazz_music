@@ -121,8 +121,8 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                print "filename:", filename
                 if (i >= start) & (i < stop):
+                    print "attempting feature extract for :", filename
                     try:
                         y, sr, df_audio_features= get_mp3_features(musfilename)
                         print "mp3 featues work"
