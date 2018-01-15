@@ -91,7 +91,7 @@ def get_chroma_data(filename, y, sr):
 
     return df_pitch
 
-def download_mps(csv, bucket_name, start, stop):
+def download_mp3s(csv, bucket_name, start, stop):
     with open(csv) as f:
         for i, line in enumerate(f):
             if i in range(start,stop):
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Enter download details
     bucket_name = str(raw_input("Enter bucket name:"))
     csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
-    start = 4
+    start = 2
     stop = 3
 
     cont = 'y'
@@ -145,7 +145,6 @@ if __name__ == '__main__':
         # Upload Audio Feature csv to cloud & remove from local
         os.system('aws s3 cp mp3_audio_features_{}.pkl s3://{}/processed_data/mp3_audio_features_{}.pkl'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
         # delete_mp3_from_local(downloaded_mp3s)
-        os.system(' cd ..')
         #os.system('rm music_downloads')
 
         count +=1
