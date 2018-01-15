@@ -17,7 +17,7 @@ def get_mp3_features(filename):
         - root mean square energy per segment (mean, median, std)
 
     '''
-    print "filenam 2:", filename
+    print "Processing filename 2:", filename, "this may take a while ..."
     try:
         # Load audio data
         y, sr = librosa.load(filename)
@@ -28,7 +28,7 @@ def get_mp3_features(filename):
         p_tempo, p_beats = librosa.beat.beat_track(y=y_percussive, sr=sr)
 
         # Get Root Mean Squared Energy (avg, median & standard deviation)
-        rmse_arr = librosa.feature.rmsa(y=y, sr=sr)
+        rmse_arr = librosa.feature.rmse(y=y, sr=sr)
         avg_rmse = rmse_arr.mean()
         med_rmse = np.ma.median(rmse_arr)
         std_rmse = rmse_arr.std()
@@ -124,7 +124,7 @@ if __name__ == '__main__':
                 if (i >= start) & (i < stop):
                     print "attempting feature extract for :", filename
                     try:
-                        y, sr, df_audio_features= get_mp3_features(musfilename)
+                        y, sr, df_audio_features= get_mp3_features(filename)
                         print "mp3 featues work"
                         df_pitch = get_chroma_data(filename, y, sr)
                         print " chroma works"
