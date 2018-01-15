@@ -6,7 +6,7 @@ from pydub import AudioSegment
 import os
 
 from ec2_wav_pipeline import create_directories_and_text_files, download_mps, get_list
-from download_mp3_ec2 import transfer_df_to_s3
+#from download_mp3_ec2 import transfer_df_to_s3
 
 
 def get_mp3_features(filename, count):
@@ -38,9 +38,10 @@ def get_mp3_features(filename, count):
 
         # Append results to csv
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+
             for feature in [filename[:-4],h_tempo, h_beats, p_tempo,p_beats ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
-            f.write("{},".format(feature))
-            f.write("/n")
+                f.write("{},".format(feature))
+                f.write("/n")
 
         return y, src
 
@@ -62,7 +63,7 @@ def save_chroma_data(filename, y, sr, count):
 
     chroma_nlm = librosa.decompose.nn_filter(chroma, rec=rec,
                                     aggregate=np.average)
-    pitch_scale = ['B','B♯', 'A', 'G♯', 'G', 'F♯', 'E', 'D♯', 'D', 'C♯']
+    pitch_scale = ['B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ']
     values = []
 
     for i, pitch in enumerate(pitch_scale):
@@ -70,7 +71,8 @@ def save_chroma_data(filename, y, sr, count):
     # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
     pitch_values = values / sum(values)
 
-    with open('mp3_audio_features_pitch-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+    with open('mp3_audio_features_pitch-{}.csv'.format(str(count).zfill(4)),"a+") as f:
+        f.write("filename, h_tempo, h_beats, p_tempo, p_beats, avg_rmse ,med_rmse ,std_rmse, song_duration\n")
         for feature in [filename[:-4],h_tempo, h_beats, p_tempo,p_beats ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
             f.write("{},".format(feature))
             f.write("/n")
@@ -80,11 +82,7 @@ def save_chroma_data(filename, y, sr, count):
 
 if __name__ == '__main__':
     csv_list = str(raw_input("enter csv list of filenames:"))
-
-    os.system("touch audio_tempo_info-{}.csv".format(csv_list[6:-3]))
-        with open('mp3_audio_features.csv', 'a') as f:
-            f.write "filename, h_tempo, h_beats, p_tempo, p_beats, avg_rmse ,med_rmse ,std_rmse"
-
+    count = 1
     # Create directories
     create_directories_and_text_files()
 
@@ -94,7 +92,6 @@ if __name__ == '__main__':
     start = 0
     stop = 3
     cont = 'y'
-    count = 1
     while cont == 'y':
         # Download mp3s
         downloaded_mp3s = download_mps(csv, bucket_name, start, stop)
@@ -105,7 +102,7 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                while (i => start) & while (i < stop):
+                while (i >= start) & (i < stop):
                     try:
                         y, src = get_mp3_features(filename, count)
                     except:
