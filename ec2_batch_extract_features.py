@@ -95,7 +95,7 @@ def download_mp3s(csv, bucket_name, start, stop):
     with open(csv) as f:
         for i, line in enumerate(f):
             if i in range(start,stop):
-                os.system('aws s3 cp s3://{}/{}'.format(bucket_name, line.strip()))
+                os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
 
 
 
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     # Enter download details
     bucket_name = str(raw_input("Enter bucket name:"))
     csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
-    start = 2
+    start = 0
     stop = 3
 
     cont = 'y'
