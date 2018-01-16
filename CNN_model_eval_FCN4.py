@@ -95,19 +95,19 @@ def Model(num_classes, input_shape):
 
     #Hidden Layer 1
     model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he_normal'))
-    model.add(MaxPooling2D(pool_size=(4, 5)))
+    model.add(MaxPooling2D(pool_size=(2, 5)))
     model.add(BatchNormalization())
     model.add(Dropout(0.5))
 
     #Hidden Layer 2
     model.add(Conv2D(768, (3, 3), activation='relu', kernel_initializer='he_normal'))
-    model.add(MaxPooling2D(pool_size=(3, 8)))
+    model.add(MaxPooling2D(pool_size=(2, 8)))
     model.add(BatchNormalization())
     model.add(Dropout(0.5))
 
     #Hidden Layer 3
     model.add(Conv2D(2048, (1, 1), activation='relu', kernel_initializer='he_normal'))
-    model.add(MaxPooling2D(pool_size=(4, 8)))
+    model.add(MaxPooling2D(pool_size=(2, 8)))
     model.add(BatchNormalization())
     model.add(Dropout(0.5))
 
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     #     continue
 
     checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
-    
+
     model.fit(X_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
