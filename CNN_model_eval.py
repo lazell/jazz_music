@@ -89,7 +89,7 @@ def Model(num_classes, input_shape):
                      activation='relu',
                      input_shape=input_shape,
                      kernel_initializer='he_normal'))
-    model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
+    model.add(MaxPooling2D(pool_size=(2, 4), strides=(1, 1)))
     model.add(BatchNormalization())
     model.add(Dropout(0.5))
 
