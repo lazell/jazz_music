@@ -37,7 +37,7 @@ def preprocess_data(X,Y,reduce_to=0):
 
 
     print "Y data: {}".format(Y[:10])
-    print "X data: {}".format(X[0, :, :, :])
+
 
     binarize = str(raw_input("Do you need to binarize categories? (y/n):"))
     if binarize == 'y':
@@ -48,6 +48,8 @@ def preprocess_data(X,Y,reduce_to=0):
 
     # Normalize data between -1 and 1
     X = scale_range(X,-1,1)
+
+    print "X data: {}".format(X[0, :, :, :])
 
     print X.shape, Y.shape
     return X, Y
@@ -124,8 +126,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.Adam(),
-                  lr= 0.0001,
+                  optimizer=keras.optimizers.Adam(lr=0.0001),
                   metrics=['accuracy'])
     return model
 
