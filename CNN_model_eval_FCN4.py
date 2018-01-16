@@ -184,7 +184,8 @@ if __name__ == '__main__':
     # else:
     #     continue
 
-
+    checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
+    
     model.fit(X_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
@@ -196,7 +197,7 @@ if __name__ == '__main__':
     score = model.evaluate(X_test, y_test, verbose=0)
     model.summary()
 
-    checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
+
 
 
     print('Test loss:', score[0])
