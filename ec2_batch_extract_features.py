@@ -103,7 +103,7 @@ def download_mp3s(csv, bucket_name, start, stop):
     lst = []
     with open(csv, 'r') as f:
         for i, line in enumerate(f):
-            if i in range(6,8):
+            if i in range(start,stop):
                 print "{}".format(line.strip())
                 os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
                 lst.append(line.strip())
