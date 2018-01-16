@@ -43,9 +43,10 @@ def get_mp3_features(filename):
         # Append results to csv
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
             f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
-            for feature in [filename[:-4],h_tempo, p_tempo ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
+            for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
-            f.write("\n")
+                f.write("\n")
+
 
 
         # Generate results in dataframe
@@ -77,13 +78,20 @@ def get_chroma_data(filename, y, sr, count):
 
         chroma_nlm = librosa.decompose.nn_filter(chroma, rec=rec,
                                         aggregate=np.average)
-        pitch_scale = ['B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ']
+        pitch_scale = ['B','A#', 'A', 'G#', 'G', 'F#','F', 'E', 'D#', 'D','C#','C']
         values = []
 
         for i, pitch in enumerate(pitch_scale):
                 values.append(chroma_nlm[i].sum())
         # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
         pitch_values = values / sum(values)
+
+        # Append results to csv
+        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+            f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
+            for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
+                f.write("{},".format(feature))
+                f.write("\n")
 
         # Generate Dataframe of pitch features for song
         df_pitch = pd.DataFrame(pitch_values).transpose()
@@ -131,7 +139,7 @@ if __name__ == '__main__':
         downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
 
         #Initialize pitch dataframe
-        chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
+        chroma_cols = ['filename','B','A#', 'A', 'G#', 'G', 'F#','F', 'E', 'D#', 'D','C#','C','chroma_arr']
         df_c = pd.DataFrame(columns=chroma_cols)
 
         #Get Audio Features

@@ -8,22 +8,29 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.utils import shuffle
 import matplotlib.pylab as plt
 
 import os
 import time
 
+def scale_range (input_, min_, max_):
+    input_ += -(np.min(input_))
+    input_ /= np.max(input_) / (max_ - min_)
+    input_ += min_
+    return input_
+
 def preprocess_data(X,Y,reduce_to=0):
-    #Import Data
+    # Import Data
     X = np.load(X)['arr_0']
     Y = np.load(Y)['arr_0']
 
     if reduce_to != 0:
-        #Reduce to data points
+        # Reduce to data points
         X = X[:reduce_to, :, :, :]
         Y = Y[:reduce_to]
 
-    #Remove NaNs
+    # Remove NaNs
     Y = pd.DataFrame(Y)
     Y = Y.fillna('None')
     Y = np.array(Y[0])
@@ -35,9 +42,12 @@ def preprocess_data(X,Y,reduce_to=0):
     binarize = str(raw_input("Do you need to binarize categories? (y/n):"))
     if binarize == 'y':
 
-        #Convert Y's to binary categories
+        # Convert Y's to binary categories
         encoder = LabelBinarizer()
         Y = encoder.fit_transform(Y)
+
+    # Normalize data between -1 and 1
+    X = scale_range(X,-1,1)
 
     print X.shape, Y.shape
     return X, Y
@@ -50,6 +60,9 @@ def test_train_split(X,Y,proportion=0.8):
     # Test Train Split
     X_train = X[:split]
     X_test = X[split:]
+
+    X_train = shuffle(X_train)
+    X_test = shuffle(X_test)
 
     y_train = Y[:split]
     y_test = Y[split:]
@@ -71,29 +84,34 @@ def Model(num_classes, input_shape):
     #Input layer
     model.add(Conv2D(128, kernel_size=(3, 3), strides=(1, 1),
                      activation='relu',
-                     input_shape=input_shape))
+                     input_shape=input_shape,
+                     kernel_initializer='he'))
     model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
-    model.add(BatchNormalization(axis=1))
+    model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 1
-    model.add(Conv2D(384, (3, 3), activation='relu'))
+    model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he'))
     model.add(MaxPooling2D(pool_size=(2, 5)))
+    model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 2
-    model.add(Conv2D(768, (3, 3), activation='relu'))
+    model.add(Conv2D(768, (3, 3), activation='relu', kernel_initializer='he'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
+    model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 3
-    model.add(Conv2D(2048, (3, 3), activation='relu'))
+    model.add(Conv2D(2048, (3, 3), activation='relu', kernel_initializer='he'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
+    model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 4
     model.add(Flatten())
-    model.add(Dense(128, activation='relu'))
+    model.add(Dense(128, activation='relu', kernel_initializer='he'))
+    model.add(BatchNormalization())
     model.add(Dropout(0.1))
 
     #Output layer
@@ -107,6 +125,7 @@ def Model(num_classes, input_shape):
 
     model.compile(loss=loss_type,
                   optimizer=keras.optimizers.Adam(),
+                  lr= 0.0001,
                   metrics=['accuracy'])
     return model
 
@@ -162,7 +181,7 @@ if __name__ == '__main__':
               verbose=1,
               validation_data=(X_test, y_test),
               callbacks=[history],
-              shuffle=True)
+              shuffle=False)
 
     score = model.evaluate(X_test, y_test, verbose=0)
 
@@ -171,10 +190,9 @@ if __name__ == '__main__':
 
     # Record model stop time
     run_time_s = time.clock() - start_time
-    if run_time_s >=9000:
-        print 1.*run_time_s/3600, " Hours to run model"
-    else:
-        print 1.*run_time_s/60, " Minutes to run model"
+
+    run_time_s " runtime (seconds)"
+
 
     print "Close chart to continue"
     plt.plot(range(1, epochs+1), history.acc)
