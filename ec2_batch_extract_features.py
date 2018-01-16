@@ -41,11 +41,11 @@ def get_mp3_features(filename):
         song_duration = song.duration_seconds
         print "Processed durations"
         # Append results to csv
-        # with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-        #
-        #     for feature in [filename[:-4],h_tempo, h_beats, p_tempo,p_beats ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
-        #         f.write("{},".format(feature))
-        #         f.write("/n")
+        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+
+            for feature in [filename[:-4],h_tempo, h_beats, p_tempo,p_beats ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
+                f.write("{},".format(feature))
+                f.write("/n")
 
 
         # Generate results in dataframe
@@ -112,8 +112,8 @@ if __name__ == '__main__':
     # Enter download details
     bucket_name = str(raw_input("Enter bucket name:"))
     csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
-    start = 0
-    stop = 3
+    start = 6
+    stop = 8
 
     cont = 'y'
     while cont == 'y':
@@ -140,7 +140,7 @@ if __name__ == '__main__':
                         print "Dataframe created"
                         df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
                         print "Dataframe saved! \n"
-                        
+
                     except:
                         print "file does not exist or is corrupt"
 
