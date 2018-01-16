@@ -100,6 +100,7 @@ def get_chroma_data(filename, y, sr):
 def download_mp3s(csv, bucket_name, start, stop):
     with open(csv) as f:
         for i, line in enumerate(f):
+            print i
             if i in range(start,stop):
                 print "{}".format(line.strip())
                 try:
@@ -130,7 +131,7 @@ if __name__ == '__main__':
         df_c = pd.DataFrame(columns=chroma_cols)
 
         #Get Audio Features
-        with open('mp3s.txt', 'r') as f:
+        with open(csv_list, 'r') as f:
             for i, filename in enumerate(f):
                 print i
                 if (i in range(6,8)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
