@@ -123,7 +123,7 @@ if __name__ == '__main__':
     cont = 'y'
     while cont == 'y':
         # Download mp3s
-        downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
+        downloaded_mp3s = download_mp3s(csv_list, bucket_name, 6, 8)
 
         #Initialize pitch dataframe
         chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
@@ -132,7 +132,8 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                if (i in range(start,stop)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
+                print i
+                if (i in range(6,8)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
                     print "Attempting feature extract for :", filename
                     try:
                         y, sr, df_values = get_mp3_features(filename.strip())
