@@ -133,18 +133,17 @@ if __name__ == '__main__':
                         y, sr, df_values = get_mp3_features(filename.strip())
                         df_pitch = get_chroma_data(filename.strip(), y, sr)
                         print "Chroma features fetched!"
+
+                        # Collate & Save DataFrame
+                        df_a = df_c.append(df_pitch)
+                        df_c = df_a.merge(df_values, on='filename')
+                        print "Dataframe created"
+                        df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
+                        print "Dataframe saved! \n"
+                        
                     except:
                         print "file does not exist or is corrupt"
 
-                    #Add data to dataframe
-                    try:
-                        # Collate & Save DataFrame
-                        df_c = df_c.append(df_pitch)
-                        df_c = df_c.merge(df_values, on='filename')
-                        df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
-
-                    except:
-                        print "{} did not convert".format(filename)
 
 
         # Upload Audio Feature csv to cloud & remove from local
