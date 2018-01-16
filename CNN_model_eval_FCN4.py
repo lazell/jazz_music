@@ -64,8 +64,8 @@ def test_train_split(X,Y,proportion=0.8):
     X_train = X[:split]
     X_test = X[split:]
 
-    X_train = shuffle(X_train,seed=8)
-    X_test = shuffle(X_test,seed=14)
+    X_train = shuffle(X_train,random_state=8)
+    X_test = shuffle(X_test,random_state=14)
 
     y_train = Y[:split]
     y_test = Y[split:]
