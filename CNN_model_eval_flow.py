@@ -42,7 +42,6 @@ def preprocess_data(X,Y,reduce_to=0):
 
     binarize = str(raw_input("Do you need to binarize categories? (y/n):"))
     if binarize == 'y':
-
         # Convert Y's to binary categories
         encoder = LabelBinarizer()
         Y = encoder.fit_transform(Y)

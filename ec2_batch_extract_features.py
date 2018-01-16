@@ -42,7 +42,6 @@ def get_mp3_features(filename):
         print "Processed durations"
         # Append results to csv
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-            f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
             for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
                 f.write("\n")
@@ -50,10 +49,10 @@ def get_mp3_features(filename):
 
 
         # Generate results in dataframe
-        cols = ['filename','h_tempo', 'h_beats', 'p_tempo' ,'p_beats' ,'avg_rmse' ,'med_rmse' ,'std_rmse', 'song_duration']
-        df_audio_features = pd.DataFrame(columns = cols)
-        df_values = pd.DataFrame([filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]).transpose()
-        df_values.columns = cols
+        #cols = ['filename','h_tempo', 'h_beats', 'p_tempo' ,'p_beats' ,'avg_rmse' ,'med_rmse' ,'std_rmse', 'song_duration']
+        #df_audio_features = pd.DataFrame(columns = cols)
+        #df_values = pd.DataFrame([filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]).transpose()
+        #df_values.columns = cols
 
         print "Mp3 features work!"
 
@@ -85,24 +84,23 @@ def get_chroma_data(filename, y, sr, count):
                 values.append(chroma_nlm[i].sum())
         # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
         pitch_values = values / sum(values)
-
-        # Append results to csv
-        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-            f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
-            for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
-                f.write("{},".format(feature))
-                f.write("\n")
+        print pitch_values
 
         # Generate Dataframe of pitch features for song
         df_pitch = pd.DataFrame(pitch_values).transpose()
-        df_pitch.columns = pitch_scale
-        df_pitch['filename'] = None
-        df_pitch['chroma_arr'] = None
-        df_pitch['filename'].iloc[0] = filename
-        df_pitch['chroma_arr'].iloc[0] = chroma_nlm
+        #df_pitch.columns = pitch_scale
+        #df_pitch['filename'] = None
+        #df_pitch['chroma_arr'] = None
+        #df_pitch['filename'].iloc[0] = filename
+        #df_pitch['chroma_arr'].iloc[0] = chroma_nlm
 
         #df_pitch.to_pickle('mp3_audio_features-{}.pkl')
-        return df_pitch
+
+        # Append results to csv
+        with open('mp3_pitch_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+            f.write(",".join(df_pitch[0])
+            f.write("\n")
+        return df_pitch.
 
     except:
         print "Could not extract pitch features"
@@ -137,11 +135,18 @@ if __name__ == '__main__':
     while cont == 'y':
         # Download mp3s
         downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
+        print downloaded_mp3s
 
         #Initialize pitch dataframe
-        chroma_cols = ['filename','B','A#', 'A', 'G#', 'G', 'F#','F', 'E', 'D#', 'D','C#','C','chroma_arr']
-        df_c = pd.DataFrame(columns=chroma_cols)
+        #chroma_cols = ['filename','B','A#', 'A', 'G#', 'G', 'F#','F', 'E', 'D#', 'D','C#','C','chroma_arr']
+        #df_c = pd.DataFrame(columns=chroma_cols)
 
+
+        with open('mp3_pitch_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+            f.write('filename, B, A#, A, G#, G, F#, F, E, D#, D, C#, C\n')
+
+        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+            f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
         #Get Audio Features
         with open(csv_list, 'r') as f:
             for i, filename in enumerate(f):
@@ -154,7 +159,7 @@ if __name__ == '__main__':
                             print "Chroma features fetched!"
 
                             # Collate & Save DataFrame
-                            df_c = df_c.append(df_pitch)
+                            #df_c = df_c.append(df_pitch)
                             #df_c = df_a.merge(df_values, on='filename')
                             print "Dataframe created"
 
@@ -165,7 +170,8 @@ if __name__ == '__main__':
                     else:
                         continue
 
-        df_c.to_pickle('mp3_audio_features-{}.pkl')
+        #df_c.to_pickle('mp3_audio_features-{}.pkl')
+
         # Upload Audio Feature csv to cloud & remove from local
         os.system('aws s3 cp mp3_audio_features_{}.pkl s3://{}/processed_data/mp3_audio_features_{}.pkl'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
 
@@ -178,4 +184,4 @@ if __name__ == '__main__':
         cont = raw_input("Continue to download next batch? (y/n)")
     while cont == 'y':
         start = stop
-        stop += 2
+        stop += 20
