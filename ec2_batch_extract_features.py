@@ -42,8 +42,8 @@ def get_mp3_features(filename):
         print "Processed durations"
         # Append results to csv
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-            f.write('filename, h_tempo, h_beats, p_tempo, p_beats, avg_rmse, med_rmse, std_rmse,song_duration\n')
-            for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo,len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
+            f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
+            for feature in [filename[:-4],h_tempo, p_tempo ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
             f.write("\n")
 
