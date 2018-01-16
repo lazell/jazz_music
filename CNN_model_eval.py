@@ -85,32 +85,32 @@ def Model(num_classes, input_shape):
     model.add(Conv2D(128, kernel_size=(3, 3), strides=(1, 1),
                      activation='relu',
                      input_shape=input_shape,
-                     kernel_initializer='he'))
+                     kernel_initializer='he_normal'))
     model.add(MaxPooling2D(pool_size=(2, 4), strides=(2, 2)))
     model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 1
-    model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he'))
+    model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he_normal'))
     model.add(MaxPooling2D(pool_size=(2, 5)))
     model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 2
-    model.add(Conv2D(768, (3, 3), activation='relu', kernel_initializer='he'))
+    model.add(Conv2D(768, (3, 3), activation='relu', kernel_initializer='he_normal'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
     model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 3
-    model.add(Conv2D(2048, (3, 3), activation='relu', kernel_initializer='he'))
+    model.add(Conv2D(2048, (3, 3), activation='relu', kernel_initializer='he_normal'))
     model.add(MaxPooling2D(pool_size=(2, 8)))
     model.add(BatchNormalization())
     model.add(Dropout(0.3))
 
     #Hidden Layer 4
     model.add(Flatten())
-    model.add(Dense(128, activation='relu', kernel_initializer='he'))
+    model.add(Dense(128, activation='relu', kernel_initializer='he_normal'))
     model.add(BatchNormalization())
     model.add(Dropout(0.1))
 
@@ -191,7 +191,8 @@ if __name__ == '__main__':
     # Record model stop time
     run_time_s = time.clock() - start_time
 
-    run_time_s " runtime (seconds)"
+    print run_time_s
+    print "seconds"
 
 
     print "Close chart to continue"
