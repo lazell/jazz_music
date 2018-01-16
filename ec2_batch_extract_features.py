@@ -87,7 +87,7 @@ def get_chroma_data(filename, y, sr, count):
         print pitch_values
 
         # Generate Dataframe of pitch features for song
-        df_pitch = pd.DataFrame(pitch_values).transpose()
+        df_pitch = pd.DataFrame(pitch_values) #.transpose()
         #df_pitch.columns = pitch_scale
         #df_pitch['filename'] = None
         #df_pitch['chroma_arr'] = None
