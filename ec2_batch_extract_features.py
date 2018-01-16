@@ -114,8 +114,10 @@ if __name__ == '__main__':
     count = 1
 
     # Enter download details
-    bucket_name = str(raw_input("Enter bucket name:"))
-    csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
+    #bucket_name = str(raw_input("Enter bucket name:"))
+    #csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
+    bucket_name = "swingmusic001"
+    csv_list = "mp3s.txt"
     start = 6
     stop = 8
 
