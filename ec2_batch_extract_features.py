@@ -99,14 +99,12 @@ def get_chroma_data(filename, y, sr):
 
 def download_mp3s(csv, bucket_name, start, stop):
     with open(csv) as f:
-        for i, line in enumerate(f):
-            print i
-            if i in range(start,stop):
-                print "{}".format(line.strip())
-                try:
-                    os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
-                except:
-                    continue
+        for i, line in enumerate(f)[start:stop]:
+            print "{}".format(line.strip())
+            try:
+                os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
+            except:
+                break
 
 
 
