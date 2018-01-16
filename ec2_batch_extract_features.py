@@ -154,6 +154,8 @@ if __name__ == '__main__':
 
                         except:
                             print "file does not exist or is corrupt"
+                    else:
+                        continue
 
         df_c.to_pickle('mp3_audio_features-{}.pkl')
         # Upload Audio Feature csv to cloud & remove from local
