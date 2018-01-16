@@ -100,11 +100,14 @@ def get_chroma_data(filename, y, sr, count):
         print "Could not extract pitch features"
 
 def download_mp3s(csv, bucket_name, start, stop):
+    lst = []
     with open(csv, 'r') as f:
         for i, line in enumerate(f):
             if i in range(6,8):
                 print "{}".format(line.strip())
                 os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
+                lst.append(line.strip())
+        return lst
 
 
 
@@ -118,10 +121,11 @@ if __name__ == '__main__':
     #csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
     bucket_name = "swingmusic001"
     csv_list = "mp3s.txt"
-    start = 6
-    stop = 8
+    start = 10
+    stop = 12
 
     cont = 'y'
+
     while cont == 'y':
         # Download mp3s
         downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
@@ -133,9 +137,7 @@ if __name__ == '__main__':
         #Get Audio Features
         with open(csv_list, 'r') as f:
             for i, filename in enumerate(f):
-                print i
-                if (i in range(6,8)):
-                    print i
+                if (i in range(start,stop)):
                     if (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
                         print "Attempting feature extract for :", filename
                         try:
@@ -144,7 +146,7 @@ if __name__ == '__main__':
                             print "Chroma features fetched!"
 
                             # Collate & Save DataFrame
-                            df_a = df_c.append(df_pitch)
+                            df_c = df_c.append(df_pitch)
                             #df_c = df_a.merge(df_values, on='filename')
                             print "Dataframe created"
 
@@ -153,16 +155,16 @@ if __name__ == '__main__':
                         except:
                             print "file does not exist or is corrupt"
 
-
+        df_c.to_pickle('mp3_audio_features-{}.pkl')
         # Upload Audio Feature csv to cloud & remove from local
         os.system('aws s3 cp mp3_audio_features_{}.pkl s3://{}/processed_data/mp3_audio_features_{}.pkl'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
+
         # delete_mp3_from_local(downloaded_mp3s)
-        #os.system('rm music_downloads')
+        for mp3 in downloaded_mp3s:
+            os.system('rm {}'.format(mp3))
 
         count +=1
         cont = raw_input("Continue to download next batch? (y/n)")
-        #while cont == 'y':
-        #    start = stop
-        #    #stop += 250
-        #else:
-        #    break
+        while cont == 'y':
+            start = stop
+            stop += 2
