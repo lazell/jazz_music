@@ -178,11 +178,12 @@ if __name__ == '__main__':
     start_time = time.clock()
 
      # Initialize weights using checkpoint if it exists. (Checkpointing requires h5py)
-    load_checkpoint = bool(raw_input("do you want to load checkpoint weights? True/False"))
-    if load_checkpoint:
-        model.load_weights(checkpoint_filepath)
+    # load_checkpoint = bool(raw_input("do you want to load checkpoint weights? True/False"))
+    # if load_checkpoint:
+    #     model.load_weights('weights.hdf5')
+    # else:
+    #     continue
 
-    checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
     model.fit(X_train, y_train,
               batch_size=batch_size,
@@ -194,6 +195,8 @@ if __name__ == '__main__':
 
     score = model.evaluate(X_test, y_test, verbose=0)
     model.summary()
+
+    checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
 
     print('Test loss:', score[0])
