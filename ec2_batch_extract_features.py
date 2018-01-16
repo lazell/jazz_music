@@ -129,7 +129,7 @@ if __name__ == '__main__':
         df_c = pd.DataFrame(columns=chroma_cols)
 
         #Get Audio Features
-        with open(csv_list, 'r') as f:
+        with open(csv_list, 'a') as f:
             for i, filename in enumerate(f):
                 print i
                 if (i in range(6,8)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
