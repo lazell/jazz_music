@@ -45,7 +45,7 @@ def get_mp3_features(filename):
             f.write('filename, h_tempo, h_beats, p_tempo, p_beats, avg_rmse, med_rmse, std_rmse,song_duration\n')
             for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo,len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
-                f.write("\n")
+            f.write("\n")
 
 
         # Generate results in dataframe
@@ -163,10 +163,11 @@ if __name__ == '__main__':
 
         # delete_mp3_from_local(downloaded_mp3s)
         for mp3 in downloaded_mp3s:
+            print mp3
             os.system('rm {}'.format(mp3))
 
         count +=1
         cont = raw_input("Continue to download next batch? (y/n)")
-        while cont == 'y':
-            start = stop
-            stop += 2
+    while cont == 'y':
+        start = stop
+        stop += 2
