@@ -153,8 +153,8 @@ if __name__ == '__main__':
 
         count +=1
         cont = raw_input("Continue to download next batch? (y/n)")
-        if cont == 'y':
-            start = stop
-            #stop += 250
-        else:
-            break
+        #while cont == 'y':
+        #    start = stop
+        #    #stop += 250
+        #else:
+        #    break
