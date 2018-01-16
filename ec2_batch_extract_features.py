@@ -98,7 +98,7 @@ def get_chroma_data(filename, y, sr):
         print "Could not extract pitch features"
 
 def download_mp3s(csv, bucket_name, start, stop):
-    with open(csv) as f:
+    with open(csv, 'r') as f:
         for i, line in enumerate(f):
             if i in range(6,8):
                 print "{}".format(line.strip())
@@ -129,25 +129,27 @@ if __name__ == '__main__':
         df_c = pd.DataFrame(columns=chroma_cols)
 
         #Get Audio Features
-        with open(csv_list, 'a') as f:
+        with open(csv_list, 'r') as f:
             for i, filename in enumerate(f):
                 print i
-                if (i in range(6,8)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
-                    print "Attempting feature extract for :", filename
-                    try:
-                        y, sr, df_values = get_mp3_features(filename.strip())
-                        df_pitch = get_chroma_data(filename.strip(), y, sr)
-                        print "Chroma features fetched!"
+                if (i in range(6,8)):
+                    print i
+                    if (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
+                        print "Attempting feature extract for :", filename
+                        try:
+                            y, sr, df_values = get_mp3_features(filename.strip())
+                            df_pitch = get_chroma_data(filename.strip(), y, sr)
+                            print "Chroma features fetched!"
 
-                        # Collate & Save DataFrame
-                        df_a = df_c.append(df_pitch)
-                        df_c = df_a.merge(df_values, on='filename')
-                        print "Dataframe created"
-                        df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
-                        print "Dataframe saved! \n"
+                            # Collate & Save DataFrame
+                            df_a = df_c.append(df_pitch)
+                            df_c = df_a.merge(df_values, on='filename')
+                            print "Dataframe created"
+                            df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
+                            print "Dataframe saved! \n"
 
-                    except:
-                        print "file does not exist or is corrupt"
+                        except:
+                            print "file does not exist or is corrupt"
 
 
 
