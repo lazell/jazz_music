@@ -42,10 +42,10 @@ def get_mp3_features(filename):
         print "Processed durations"
         # Append results to csv
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-
-            for feature in [filename[:-4],h_tempo, h_beats, p_tempo,p_beats ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
+            f.write('filename, h_tempo, h_beats, p_tempo, p_beats, avg_rmse, med_rmse, std_rmse,song_duration\n')
+            for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo,len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
-                f.write("/n")
+                f.write("\n")
 
 
         # Generate results in dataframe
@@ -54,7 +54,7 @@ def get_mp3_features(filename):
         df_values = pd.DataFrame([filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]).transpose()
         df_values.columns = cols
 
-        print "Mp3 featues work!"
+        print "Mp3 features work!"
 
         return y, sr, df_values
     except:
@@ -62,7 +62,7 @@ def get_mp3_features(filename):
 
 
 
-def get_chroma_data(filename, y, sr):
+def get_chroma_data(filename, y, sr, count):
 
     try:
         # Get Pitch percentages of song
@@ -93,7 +93,9 @@ def get_chroma_data(filename, y, sr):
         df_pitch['filename'].iloc[0] = filename
         df_pitch['chroma_arr'].iloc[0] = chroma_nlm
 
+        #df_pitch.to_pickle('mp3_audio_features-{}.pkl')
         return df_pitch
+
     except:
         print "Could not extract pitch features"
 
@@ -122,7 +124,7 @@ if __name__ == '__main__':
     cont = 'y'
     while cont == 'y':
         # Download mp3s
-        downloaded_mp3s = download_mp3s(csv_list, bucket_name, 6, 8)
+        downloaded_mp3s = download_mp3s(csv_list, bucket_name, start, stop)
 
         #Initialize pitch dataframe
         chroma_cols = ['filename','B','B#', 'A', 'G#', 'G', 'F#', 'E', 'D#', 'D', 'C# ','chroma_arr']
@@ -138,19 +140,18 @@ if __name__ == '__main__':
                         print "Attempting feature extract for :", filename
                         try:
                             y, sr, df_values = get_mp3_features(filename.strip())
-                            df_pitch = get_chroma_data(filename.strip(), y, sr)
+                            df_pitch = get_chroma_data(filename.strip(), y, sr, count)
                             print "Chroma features fetched!"
 
                             # Collate & Save DataFrame
                             df_a = df_c.append(df_pitch)
-                            df_c = df_a.merge(df_values, on='filename')
+                            #df_c = df_a.merge(df_values, on='filename')
                             print "Dataframe created"
-                            df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
+
                             print "Dataframe saved! \n"
 
                         except:
                             print "file does not exist or is corrupt"
-
 
 
         # Upload Audio Feature csv to cloud & remove from local
