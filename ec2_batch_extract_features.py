@@ -98,7 +98,7 @@ def get_chroma_data(filename, y, sr, count):
 
         # Append results to csv
         with open('mp3_pitch_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-            f.write(",".join(df_pitch[0])
+            f.write(",".join(df_pitch[0]))
             f.write("\n")
 
         return df_pitch
