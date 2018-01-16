@@ -127,11 +127,14 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                if (i >= start) & (i < stop):
+                if (i >= start) & (i < stop) & (os.stat(filename) > 130000) #Check if file is in range & larger than 130000
                     print "Attempting feature extract for :", filename
-                    y, sr, df_values = get_mp3_features(filename.strip())
-                    df_pitch = get_chroma_data(filename.strip(), y, sr)
-                    print "Chroma features fetched!"
+                    try:
+                        y, sr, df_values = get_mp3_features(filename.strip())
+                        df_pitch = get_chroma_data(filename.strip(), y, sr)
+                        print "Chroma features fetched!"
+                    except:
+                        print "file does not exist or is corrupt"
 
                     #Add data to dataframe
                     try:
