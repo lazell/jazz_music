@@ -178,18 +178,11 @@ if __name__ == '__main__':
     start_time = time.clock()
 
      # Initialize weights using checkpoint if it exists. (Checkpointing requires h5py)
-    load_checkpoint = True
-    checkpoint_filepath = 'weights.hdf5'
-    if (load_checkpoint):
-        print("Looking for previous weights...")
-        if ( isfile(checkpoint_filepath) ):
-            print ('Checkpoint file detected. Loading weights.')
-            model.load_weights(checkpoint_filepath)
-        else:
-            print ('No checkpoint file detected.  Starting from scratch.')
-    else:
-        print('Starting from scratch (no checkpoint)')
-    checkpointer = ModelCheckpoint(filepath=checkpoint_filepath, verbose=1, save_best_only=True)
+    load_checkpoint = bool(raw_input("do you want to load checkpoint weights? True/False"))
+    if load_checkpoint:
+        model.load_weights(checkpoint_filepath)
+
+    checkpointer = ModelCheckpoint(filepath='weights.hdf5', verbose=1, save_best_only=True)
 
     model.fit(X_train, y_train,
               batch_size=batch_size,
