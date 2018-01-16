@@ -104,7 +104,7 @@ def download_mp3s(csv, bucket_name, start, stop):
                 try:
                     os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
                 except:
-                    "did not download"
+                    continue
 
 
 
@@ -131,7 +131,7 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                if (i in range(start,stop)) & (i < stop) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
+                if (i in range(start,stop)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
                     print "Attempting feature extract for :", filename
                     try:
                         y, sr, df_values = get_mp3_features(filename.strip())
