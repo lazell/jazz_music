@@ -8,6 +8,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 from keras.initializers import Constant
+from keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.utils import shuffle
 import matplotlib.pylab as plt
@@ -176,15 +177,31 @@ if __name__ == '__main__':
     # Record model start time
     start_time = time.clock()
 
+     # Initialize weights using checkpoint if it exists. (Checkpointing requires h5py)
+    load_checkpoint = True
+    checkpoint_filepath = 'weights.hdf5'
+    if (load_checkpoint):
+        print("Looking for previous weights...")
+        if ( isfile(checkpoint_filepath) ):
+            print ('Checkpoint file detected. Loading weights.')
+            model.load_weights(checkpoint_filepath)
+        else:
+            print ('No checkpoint file detected.  Starting from scratch.')
+    else:
+        print('Starting from scratch (no checkpoint)')
+    checkpointer = ModelCheckpoint(filepath=checkpoint_filepath, verbose=1, save_best_only=True)
+
     model.fit(X_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
               verbose=1,
               validation_data=(X_test, y_test),
-              callbacks=[history],
+              callbacks=[checkpointer],
               shuffle=False)
 
     score = model.evaluate(X_test, y_test, verbose=0)
+    model.summary()
+
 
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])

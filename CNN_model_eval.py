@@ -15,7 +15,7 @@ import matplotlib.pylab as plt
 import os
 import time
 
-def scale_range (input_, min_, max_):
+def scale_range (X, min_, max_):
     input_ += -(np.min(input_))
     input_ /= np.max(input_) / (max_ - min_)
     input_ += min_
@@ -80,6 +80,11 @@ def test_train_split(X,Y,proportion=0.8):
 
 def Model(num_classes, input_shape):
 
+    ''' Uses FCN-4 model architecture from paper
+        AUTOMATIC TAGGING USING
+        DEEP CONVOLUTIONAL NEURAL NETWORKS
+        {keunwoo.choi, g.fazekas, mark.sandler}@qmul.ac.uk'''
+
 
     #Generate Model
     model = Sequential()
@@ -94,7 +99,7 @@ def Model(num_classes, input_shape):
     model.add(Dropout(0.5))
 
     #Hidden Layer 1
-    model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he_normal'))
+    model.add(Conv2D(384, (3, 3), activation='relu', kernel_initializer='he_normal', ))
     model.add(MaxPooling2D(pool_size=(4, 5)))
     model.add(BatchNormalization())
     model.add(Dropout(0.5))
