@@ -127,7 +127,7 @@ if __name__ == '__main__':
         #Get Audio Features
         with open('mp3s.txt', 'r') as f:
             for i, filename in enumerate(f):
-                if (i >= start) & (i < stop) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
+                if (i in range(stop:start)) & (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
                     print "Attempting feature extract for :", filename
                     try:
                         y, sr, df_values = get_mp3_features(filename.strip())
@@ -138,15 +138,14 @@ if __name__ == '__main__':
 
                     #Add data to dataframe
                     try:
+                        # Collate & Save DataFrame
                         df_c = df_c.append(df_pitch)
                         df_c = df_c.merge(df_values, on='filename')
+                        df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
+
                     except:
                         print "{} did not convert".format(filename)
 
-
-
-        # Collate & Save DataFrame
-        df_c.to_pickle('mp3_audio_features_{}.pkl'.format(str(count).zfill(4)))
 
         # Upload Audio Feature csv to cloud & remove from local
         os.system('aws s3 cp mp3_audio_features_{}.pkl s3://{}/processed_data/mp3_audio_features_{}.pkl'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
