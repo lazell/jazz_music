@@ -44,7 +44,7 @@ def get_mp3_features(filename):
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
             for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
-                f.write("\n")
+            f.write("\n")
 
 
 
@@ -100,7 +100,8 @@ def get_chroma_data(filename, y, sr, count):
         with open('mp3_pitch_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
             f.write(",".join(df_pitch[0])
             f.write("\n")
-        return df_pitch.
+
+        return df_pitch
 
     except:
         print "Could not extract pitch features"
@@ -113,7 +114,7 @@ def download_mp3s(csv, bucket_name, start, stop):
                 print "{}".format(line.strip())
                 os.system('aws s3 cp s3://{}/music_downloads/{} {}'.format(bucket_name, line.strip(), line.strip()))
                 lst.append(line.strip())
-        return lst
+    return lst
 
 
 
@@ -147,6 +148,7 @@ if __name__ == '__main__':
 
         with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
             f.write('filename, h_tempo, p_tempo, avg_rmse, med_rmse, std_rmse,song_duration\n')
+
         #Get Audio Features
         with open(csv_list, 'r') as f:
             for i, filename in enumerate(f):
@@ -173,9 +175,10 @@ if __name__ == '__main__':
         #df_c.to_pickle('mp3_audio_features-{}.pkl')
 
         # Upload Audio Feature csv to cloud & remove from local
-        os.system('aws s3 cp mp3_audio_features_{}.pkl s3://{}/processed_data/mp3_audio_features_{}.pkl'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
+        os.system(('aws s3 cp mp3_audio_features-{}.csv s3://{}/processed_data/mp3_audio_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
+        os.system('aws s3 cp mp3_pitch_features-{}.csv s3://{}/processed_data/mp3_pitch_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
 
-        # delete_mp3_from_local(downloaded_mp3s)
+        # Delete_mp3_from_local(downloaded_mp3s)
         for mp3 in downloaded_mp3s:
             print mp3
             os.system('rm {}'.format(mp3))
