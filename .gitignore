@@ -12,7 +12,7 @@
 /s3_lists.txt
 /s3_list.txt
 /upload_wav__to_s3.csv
-/CNN_Models
+/CNN_Models/*
 /processed_data
 *.ipynb
 error.txt
