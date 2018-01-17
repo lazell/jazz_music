@@ -130,8 +130,8 @@ if __name__ == '__main__':
     #csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
     bucket_name = "swingmusic001"
     csv_list = "mp3s.txt"
-    start = 0
-    stop = 100
+    start = 1
+    stop = 3
 
     cont = 'y'
 
@@ -169,12 +169,11 @@ if __name__ == '__main__':
 
                             print "Dataframe saved! \n"
                         except:
-                            print "error processing"
+                            continue
                     else:
                         continue
 
         #df_c.to_pickle('mp3_audio_features-{}.pkl')
-
         # Upload Audio Feature csv to cloud & remove from local
         os.system('aws s3 cp mp3_audio_features-{}.csv s3://{}/processed_data/mp3_audio_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
         os.system('aws s3 cp mp3_pitch_features-{}.csv s3://{}/processed_data/mp3_pitch_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
