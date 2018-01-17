@@ -120,18 +120,17 @@ def download_mp3s(csv, bucket_name, start, stop):
 
 
 
-
 if __name__ == '__main__':
 
-    count = 1
+    count = str(raw_input("file ID format 0001: "))
 
     # Enter download details
     #bucket_name = str(raw_input("Enter bucket name:"))
     #csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
     bucket_name = "swingmusic001"
     csv_list = "mp3s.txt"
-    start = 1
-    stop = 3
+    start = str(raw_input("Start ID: "))
+    stop = str(raw_input("Stop ID: "))
 
     cont = 'y'
 
@@ -185,6 +184,6 @@ if __name__ == '__main__':
 
         count +=1
         cont = raw_input("Continue to download next batch? (y/n)")
-    while cont == 'y':
-        start = stop
-        stop += 100
+        if cont == 'y':
+            start = stop
+            stop = str(raw_input("Stop ID: "))
