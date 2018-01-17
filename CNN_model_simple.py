@@ -1,4 +1,5 @@
 import numpy as np
+import numpy as np
 import pandas as pd
 
 import keras
@@ -8,6 +9,7 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
 from keras.initializers import Constant
+from keras.callbacks import ModelCheckpoint
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.utils import shuffle
 import matplotlib.pylab as plt
@@ -15,7 +17,7 @@ import matplotlib.pylab as plt
 import os
 import time
 
-def scale_range (X, min_, max_):
+def scale_range (input_, min_, max_):
     input_ += -(np.min(input_))
     input_ /= np.max(input_) / (max_ - min_)
     input_ += min_
@@ -42,7 +44,6 @@ def preprocess_data(X,Y,reduce_to=0):
 
     binarize = str(raw_input("Do you need to binarize categories? (y/n):"))
     if binarize == 'y':
-
         # Convert Y's to binary categories
         encoder = LabelBinarizer()
         Y = encoder.fit_transform(Y)
@@ -64,8 +65,8 @@ def test_train_split(X,Y,proportion=0.8):
     X_train = X[:split]
     X_test = X[split:]
 
-    X_train = shuffle(X_train,seed=8)
-    X_test = shuffle(X_test,seed=14)
+    X_train = shuffle(X_train,random_state=8)
+    X_test = shuffle(X_test,random_state=14)
 
     y_train = Y[:split]
     y_test = Y[split:]

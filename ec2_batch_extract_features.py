@@ -5,7 +5,7 @@ import librosa.display
 import matplotlib.pyplot as plt
 from pydub import AudioSegment
 import os
-
+import datetime
 
 #from download_mp3_ec2 import transfer_df_to_s3
 
@@ -41,12 +41,10 @@ def get_mp3_features(filename):
         song_duration = song.duration_seconds
         print "Processed durations"
         # Append results to csv
-        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
+        with open('mp3_audio_features-{}.csv'.format(datetime.datetime.now().timestamp()), 'a+') as f:
             for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
             f.write("\n")
-
-
 
         # Generate results in dataframe
         #cols = ['filename','h_tempo', 'h_beats', 'p_tempo' ,'p_beats' ,'avg_rmse' ,'med_rmse' ,'std_rmse', 'song_duration']
@@ -56,17 +54,18 @@ def get_mp3_features(filename):
 
         print "Mp3 features work!"
 
-        return y, sr, df_values
+        return y, sr
     except:
         print "{} was not able to be analyzed, data not saved".format(filename)
 
 
 
 def get_chroma_data(filename, y, sr, count):
-
+    print y
     try:
         # Get Pitch percentages of song
         chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
+        print "chroma works"
 
         #Get chroma & reduce noise by using nearest neighbors with cosine similarity to reduce noise
         chroma_med = librosa.decompose.nn_filter(chroma,
@@ -77,6 +76,8 @@ def get_chroma_data(filename, y, sr, count):
 
         chroma_nlm = librosa.decompose.nn_filter(chroma, rec=rec,
                                         aggregate=np.average)
+        print "chroma nlm works"
+
         pitch_scale = ['B','A#', 'A', 'G#', 'G', 'F#','F', 'E', 'D#', 'D','C#','C']
         values = []
 
@@ -84,10 +85,9 @@ def get_chroma_data(filename, y, sr, count):
                 values.append(chroma_nlm[i].sum())
         # Return pitch percentage of prominance (sum of values for each pitch over sum of all pitches)
         pitch_values = values / sum(values)
-        print pitch_values
 
         # Generate Dataframe of pitch features for song
-        df_pitch = pd.DataFrame(pitch_values) #.transpose()
+        #df_pitch = pd.DataFrame(pitch_values) #.transpose()
         #df_pitch.columns = pitch_scale
         #df_pitch['filename'] = None
         #df_pitch['chroma_arr'] = None
@@ -98,7 +98,9 @@ def get_chroma_data(filename, y, sr, count):
 
         # Append results to csv
         with open('mp3_pitch_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
-            f.write(",".join(df_pitch[0]))
+            f.write("{},".format(filename.strip()))
+            for value in pitch_values:
+                f.write("{},".format(value))
             f.write("\n")
 
         return df_pitch
@@ -128,8 +130,8 @@ if __name__ == '__main__':
     #csv_list = str(raw_input("Enter csv list to download:")) #in jazz_mmusic directory list of all mp3 files to download from S3
     bucket_name = "swingmusic001"
     csv_list = "mp3s.txt"
-    start = 10
-    stop = 12
+    start = 0
+    stop = 100
 
     cont = 'y'
 
@@ -156,8 +158,8 @@ if __name__ == '__main__':
                     if (os.stat(filename.strip()).st_size > 130000): #Check if file is in range & larger than 130000
                         print "Attempting feature extract for :", filename
                         try:
-                            y, sr, df_values = get_mp3_features(filename.strip())
-                            df_pitch = get_chroma_data(filename.strip(), y, sr, count)
+                            y, sr = get_mp3_features(filename.strip())
+                            get_chroma_data(filename.strip(), y, sr, count)
                             print "Chroma features fetched!"
 
                             # Collate & Save DataFrame
@@ -166,16 +168,15 @@ if __name__ == '__main__':
                             print "Dataframe created"
 
                             print "Dataframe saved! \n"
-
                         except:
-                            print "file does not exist or is corrupt"
+                            print "error processing"
                     else:
                         continue
 
         #df_c.to_pickle('mp3_audio_features-{}.pkl')
 
         # Upload Audio Feature csv to cloud & remove from local
-        os.system(('aws s3 cp mp3_audio_features-{}.csv s3://{}/processed_data/mp3_audio_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
+        os.system('aws s3 cp mp3_audio_features-{}.csv s3://{}/processed_data/mp3_audio_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
         os.system('aws s3 cp mp3_pitch_features-{}.csv s3://{}/processed_data/mp3_pitch_features-{}.csv'.format(str(count).zfill(4), bucket_name, str(count).zfill(4)))
 
         # Delete_mp3_from_local(downloaded_mp3s)
@@ -187,4 +188,4 @@ if __name__ == '__main__':
         cont = raw_input("Continue to download next batch? (y/n)")
     while cont == 'y':
         start = stop
-        stop += 20
+        stop += 100

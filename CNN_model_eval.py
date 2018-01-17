@@ -15,7 +15,7 @@ import matplotlib.pylab as plt
 import os
 import time
 
-def scale_range (X, min_, max_):
+def scale_range (input_, min_, max_):
     input_ += -(np.min(input_))
     input_ /= np.max(input_) / (max_ - min_)
     input_ += min_
