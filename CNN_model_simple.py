@@ -66,6 +66,9 @@ def test_train_split(X,Y,proportion=0.8):
     y_train = Y[:split]
     y_test = Y[split:]
 
+    y_train = shuffle(y_train,random_state=8)
+    y_test = shuffle(y_test,random_state=14)
+
     print "X_train shape: {}\n y_train shape: {}\n X_test shape: {}\n y_test shape: {}".format(X_train.shape,y_train.shape, X_test.shape, y_test.shape)
 
     #Define Input Shape of each sample
