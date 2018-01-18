@@ -4,7 +4,7 @@ import pandas as pd
 
 import keras
 from keras.datasets import mnist
-from keras.layers import Input, Dense, Flatten, Dropout, Reshape, Permute
+from keras.layers import Input, Dense, Flatten, Dropout, Reshape
 from keras.layers import Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
@@ -146,7 +146,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.Adam(lr=0.0001),
+                  optimizer=keras.optimizers.Adam(lr=0.01),
                   metrics=['accuracy'])
     return model
 
