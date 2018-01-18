@@ -33,11 +33,6 @@ def preprocess_data(X,Y,reduce_to=0):
         X = X[:reduce_to, :, :, :]
         Y = Y[:reduce_to]
 
-    # Remove NaNs
-    Y = pd.DataFrame(Y)
-    Y = Y.fillna('None')
-    Y = np.array(Y[0])
-
 
     print "Y data: {}".format(Y[:10])
 

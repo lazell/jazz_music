@@ -10,7 +10,7 @@ import datetime
 #from download_mp3_ec2 import transfer_df_to_s3
 
 
-def get_mp3_features(filename):
+def get_mp3_features(filename, count):
     '''Generates the following for each mp3 song:
         - tempo (harmonic, precussive)
         - beats (harmonic, precussive)
@@ -41,7 +41,7 @@ def get_mp3_features(filename):
         song_duration = song.duration_seconds
         print "Processed durations"
         # Append results to csv
-        with open('mp3_audio_features-{}.csv'.format(datetime.datetime.now().timestamp()), 'a+') as f:
+        with open('mp3_audio_features-{}.csv'.format(str(count).zfill(4)), 'a+') as f:
             for feature in [filename[:-4],h_tempo, len(h_beats), p_tempo, len(p_beats) ,avg_rmse ,med_rmse ,std_rmse, song_duration]:
                 f.write("{},".format(feature))
             f.write("\n")
@@ -122,7 +122,7 @@ def download_mp3s(csv, bucket_name, start, stop):
 
 if __name__ == '__main__':
 
-    count = str(raw_input("file ID format 0001: "))
+    count = int(raw_input("file ID format 1: "))
 
     # Enter download details
     #bucket_name = str(raw_input("Enter bucket name:"))
