@@ -32,11 +32,6 @@ def preprocess_data(X,Y,reduce_to=0):
         X = X[:reduce_to, :, :, :]
         Y = Y[:reduce_to]
 
-    # Remove NaNs
-    Y = pd.DataFrame(Y)
-    Y = Y.fillna('None')
-    Y = np.array(Y[0])
-
 
     print "Y data: {}".format(Y[:10])
 
@@ -69,6 +64,11 @@ def test_train_split(X,Y,proportion=0.8):
 
     y_train = Y[:split]
     y_test = Y[split:]
+
+    y_train = shuffle(X_train,random_state=8)
+    y_test = shuffle(X_test,random_state=14)
+
+    print X_train[0,:, :, :], y_train[0, :]
 
     print "X_train shape: {}\n y_train shape: {}\n X_test shape: {}\n y_test shape: {}".format(X_train.shape,y_train.shape, X_test.shape, y_test.shape)
 
@@ -128,7 +128,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.Adam(lr=0.0001),
+                  optimizer=keras.optimizers.Adam(lr=0.00002),
                   metrics=['accuracy'])
     return model
 
