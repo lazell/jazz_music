@@ -133,7 +133,7 @@ def Model(num_classes, input_shape):
     # # Hidden GRU layer
     model.add(GRU(64, return_sequences=True))
     model.add(GRU(64, return_sequences=False))
-    # model.add(Dropout(0.3))
+    model.add(Dropout(0.3))
 
 
     #Output layer
@@ -151,7 +151,7 @@ def Model(num_classes, input_shape):
     return model
 
 
-def save_model_and_metrics(model, history, run_time_s):
+def save_model_and_metrics(model, run_time_s):
     # Save model to JSON
     model_json = model.to_json()
     filename = "CNN_Models/model-{}".format(str(raw_input("Enter Model ID in numeric format (e.g. 001): ")))
@@ -164,16 +164,10 @@ def save_model_and_metrics(model, history, run_time_s):
 
     #Save Params
     with open(filename + "-params.txt", "w") as param_file:
-          param_file.write(str(history.params))
+          param_file.write(model.summary())
+          param_file.write("\n")
           param_file.write("Run time (seconds): {}".format(run_time_s))
 
-
-class AccuracyHistory(keras.callbacks.Callback):
-    def on_train_begin(self, logs={}):
-        self.acc = []
-
-    def on_epoch_end(self, batch, logs={}):
-        self.acc.append(logs.get('acc'))
 
 
 if __name__ == '__main__':
@@ -189,7 +183,6 @@ if __name__ == '__main__':
     epochs = int(raw_input("Enter number of epochs (int) :"))
 
     model = Model(num_classes, input_shape)
-    history = AccuracyHistory()
 
     # Record model start time
     start_time = time.clock()
@@ -227,10 +220,10 @@ if __name__ == '__main__':
     print "seconds"
 
 
-    print "Close chart to continue"
-    plt.plot(range(1, epochs+1), history.acc)
-    plt.xlabel('Epochs')
-    plt.ylabel('Accuracy')
-    plt.show()
+    # print "Close chart to continue"
+    # plt.plot(range(1, epochs+1), history.acc)
+    # plt.xlabel('Epochs')
+    # plt.ylabel('Accuracy')
+    # plt.show()
 
-    save_model_and_metrics(model, history, run_time_s)
+    save_model_and_metrics(model, run_time_s)

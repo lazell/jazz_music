@@ -93,7 +93,7 @@ def Model(num_classes, input_shape):
     # Input layer
     model.add(ZeroPadding2D(input_shape=input_shape,padding=(0, 37)))
     model.add(BatchNormalization(axis=freq_axis))
-    mode.add()
+
 
     # Hidden Layer 1
     model.add(Conv2D(64, kernel_size=(3, 3), strides=(1, 1),
@@ -102,28 +102,28 @@ def Model(num_classes, input_shape):
                      kernel_initializer='he_normal',
                      bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=0.5))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(1, 1)))
     model.add(Dropout(0.1))
 
     #Hidden Layer 2
     model.add(Conv2D(128, (3, 3), border_mode='same',kernel_initializer='he_normal'))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=0.5))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(1, 1)))
     model.add(Dropout(0.1))
 
     #Hidden Layer 3
     model.add(Conv2D(128, (3, 3), border_mode='same', kernel_initializer='he_normal'))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=0.5))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(1, 1)))
     model.add(Dropout(0.1))
 
     #Hidden Layer 4
     model.add(Conv2D(128, (3, 3), border_mode='same', kernel_initializer='he_normal'))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=0.5))
     model.add(MaxPooling2D(pool_size=(1, 1), strides=(1, 1)))
     model.add(Dropout(0.1))
 
@@ -148,7 +148,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.RMSprop(lr=0.00001),
+                  optimizer=keras.optimizers.RMSprop(lr=0.1),
                   metrics=['accuracy'])
     return model
 
@@ -175,7 +175,7 @@ class AccuracyHistory(keras.callbacks.Callback):
         self.acc = []
 
     def on_epoch_end(self, batch, logs={}):
-        self.acc.append(logs.get('acc'))
+        selfself.acc.append(logs.get('acc'))
 
 
 if __name__ == '__main__':
@@ -191,7 +191,8 @@ if __name__ == '__main__':
     epochs = int(raw_input("Enter number of epochs (int) :"))
 
     model = Model(num_classes, input_shape)
-    history = AccuracyHistory()
+    #history = AccuracyHistory()
+    save_model_and_metrics(model, run_time_s)
 
     # Record model start time
     start_time = time.clock()
