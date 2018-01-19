@@ -164,7 +164,7 @@ def save_model_and_metrics(model, run_time_s):
 
     #Save Params
     with open(filename + "-params.txt", "w") as param_file:
-          param_file.write(model.summary())
+          param_file.write(str(model.summary()))
           param_file.write("\n")
           param_file.write("Run time (seconds): {}".format(run_time_s))
 
