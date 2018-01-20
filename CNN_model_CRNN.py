@@ -109,7 +109,7 @@ def Model(num_classes, input_shape):
     # Hidden Layer 2
     model.add(Conv2D(128, (3, 3), border_mode='same',bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU(alpha=0.8))
+    model.add(ELU())
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
     model.add(Dropout(0.15))
 
@@ -135,7 +135,7 @@ def Model(num_classes, input_shape):
     # # Hidden GRU layer
     model.add(GRU(64, return_sequences=True))
     model.add(GRU(64, return_sequences=False))
-    model.add(Dropout(0.2))
+    model.add(Dropout(0.25))
 
 
     #Output layer
@@ -148,7 +148,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.Adam(lr=0.001),
+                  optimizer=keras.optimizers.RMSprop(lr=0.0005),
                   metrics=['accuracy'])
     return model
 
