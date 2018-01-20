@@ -148,7 +148,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.RMSprop(lr=0.00),
+                  optimizer=keras.optimizers.Adam(lr=0.01),
                   metrics=['accuracy'])
     return model
 
