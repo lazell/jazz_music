@@ -49,7 +49,7 @@ def preprocess_data(X,Y,reduce_to=0):
     X = scale_range(X,-1,1)
 
     print "X data: {}".format(X[0, :, :, :])
-    print "Y data: {}".format(Y[0])
+
 
     print X.shape, Y.shape
     return X, Y
@@ -72,6 +72,7 @@ def test_train_split(X,Y,proportion=0.8):
     y_train = shuffle(y_train,random_state=8)
     y_test = shuffle(y_test,random_state=14)
 
+    print "y_test (shuffled): {}".format(y_test[0:10])
     print "X_train shape: {}\n y_train shape: {}\n X_test shape: {}\n y_test shape: {}".format(X_train.shape,y_train.shape, X_test.shape, y_test.shape)
 
     #Define Input Shape of each sample
@@ -101,7 +102,7 @@ def Model(num_classes, input_shape):
                      border_mode='same',
                      bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU(alpha=0.8))
+    model.add(ELU())
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
     model.add(Dropout(0.15))
 
@@ -115,14 +116,14 @@ def Model(num_classes, input_shape):
     # Hidden Layer 3
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU(alpha=0.8))
+    model.add(ELU())
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
     model.add(Dropout(0.15))
 
     # Hidden Layer 4
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU(alpha=0.8))
+    model.add(ELU())
     model.add(MaxPooling2D(pool_size=(1, 1), strides=(3, 3)))
     model.add(Dropout(0.15))
 
@@ -147,7 +148,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.Adam(lr=0.0095),
+                  optimizer=keras.optimizers.Adam(lr=0.001),
                   metrics=['accuracy'])
     return model
 
