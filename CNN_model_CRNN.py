@@ -102,30 +102,30 @@ def Model(num_classes, input_shape):
                      border_mode='same',
                      bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=1.4))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
-    model.add(Dropout(0.15))
+    model.add(Dropout(0.1))
 
     # Hidden Layer 2
     model.add(Conv2D(128, (3, 3), border_mode='same',bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=1.4))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
-    model.add(Dropout(0.15))
+    model.add(Dropout(0.1))
 
     # Hidden Layer 3
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=1.4))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
-    model.add(Dropout(0.15))
+    model.add(Dropout(0.1))
 
     # Hidden Layer 4
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
-    model.add(ELU())
+    model.add(ELU(alpha=1.4))
     model.add(MaxPooling2D(pool_size=(1, 1), strides=(3, 3)))
-    model.add(Dropout(0.15))
+    model.add(Dropout(0.1))
 
     # Reshape for GRU
     model.add(Flatten())
@@ -135,7 +135,7 @@ def Model(num_classes, input_shape):
     # # Hidden GRU layer
     model.add(GRU(64, return_sequences=True))
     model.add(GRU(64, return_sequences=False))
-    model.add(Dropout(0.25))
+    model.add(Dropout(0.3))
 
 
     #Output layer
@@ -148,7 +148,7 @@ def Model(num_classes, input_shape):
         loss_type = keras.losses.mean_squared_error
 
     model.compile(loss=loss_type,
-                  optimizer=keras.optimizers.RMSprop(lr=0.0005),
+                  optimizer=keras.optimizers.RMSprop(lr=0.00),
                   metrics=['accuracy'])
     return model
 
