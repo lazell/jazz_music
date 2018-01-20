@@ -110,14 +110,14 @@ def Model(num_classes, input_shape):
     model.add(BatchNormalization(axis=sample_axis))
     model.add(ELU(alpha=0.8))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
-    model.add(Dropout(0.15)
+    model.add(Dropout(0.15))
 
     # Hidden Layer 3
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
     model.add(BatchNormalization(axis=sample_axis))
     model.add(ELU(alpha=0.8))
     model.add(MaxPooling2D(pool_size=(3, 3), strides=(3, 3)))
-    model.add(Dropout(0.15)
+    model.add(Dropout(0.15))
 
     # Hidden Layer 4
     model.add(Conv2D(128, (3, 3), border_mode='same', bias_initializer=Constant(0.01)))
