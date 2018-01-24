@@ -140,6 +140,7 @@ def song_samples(splits,duration,song_mp3,skip=20):
 
                 print filename, " saved"
                 break
+    return filename
 
 def split_rule(df,song_id):
     #If a swing-dancable song is Superliked, take 7 samples

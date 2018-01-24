@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
+import pickle
 
 
 def validation_test_split_test_train(df):
@@ -59,6 +60,7 @@ def check_if_lindy(df_train, df_test):
     df_pred_lindy = pd.DataFrame(y_pred_lindy)
     df_pred_lindy.columns = ['Lindy_?']
 
+    pickle.dump(lindy_rf_model,open('CNN_Models/lindy_rf_model.pkl','wb'))
     return df_pred_lindy
 
 
@@ -99,6 +101,7 @@ def check_if_blues(df_train,df_test):
     df_pred_blues = pd.DataFrame(y_pred_blues)
     df_pred_blues.columns = ['Blues_?']
 
+    pickle.dump(blues_rf_model,open('CNN_Models/blues_rf_model.pkl','wb'))
     return df_pred_blues
 
 def k_nearest_neighbor(df_train,df_test):
@@ -129,6 +132,8 @@ def k_nearest_neighbor(df_train,df_test):
     y_pred_knn = knn_model.predict(X_test)
     df_pred_knn = pd.DataFrame(y_pred_knn)
     df_pred_knn.columns = ['knn']
+
+    pickle.dump(knn_model,open('CNN_Models/knn_model.pkl','wb'))
 
     return df_pred_knn
 

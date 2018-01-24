@@ -14,5 +14,8 @@
 /upload_wav__to_s3.csv
 /CNN_Models/*
 /processed_data
+/Demo_testing
 *.ipynb
+*.mp3
+*.wav
 error.txt
