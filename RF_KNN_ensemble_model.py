@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.model_selection import ShuffleSplit
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
@@ -12,7 +13,7 @@ def validation_test_split_test_train(df):
     shuffled train and test dataframes '''
 
     df = df[df['Dance style'] != 'None']
-    splits = ShuffleSplit(n_splits=1, test_size=.20, random_state=8)
+    splits = ShuffleSplit(n_splits=1, test_size=.2, random_state=9)
     for train_idx, test_idx in splits.split(df):
         print train_idx.shape, test_idx.shape
         return df.iloc[train_idx], df.iloc[test_idx]
@@ -45,9 +46,9 @@ def check_if_lindy(df_train, df_test):
     X_test = df_test[lindy_cols]
 
     lindy_rf_model = RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
-                max_depth=7, max_features=13, max_leaf_nodes=None,
+                max_depth=5, max_features=13, max_leaf_nodes=None,
                 min_impurity_decrease=0.0, min_impurity_split=None,
-                min_samples_leaf=6, min_samples_split=2,
+                min_samples_leaf=7, min_samples_split=2,
                 min_weight_fraction_leaf=0.0, n_estimators=30, n_jobs=1,
                 oob_score=False, random_state=0, verbose=0, warm_start=False)
 
@@ -87,9 +88,9 @@ def check_if_blues(df_train,df_test):
     X_test = df_test[blues_cols]
 
     blues_rf_model = RandomForestClassifier(bootstrap=True, criterion='gini',
-                max_depth=5, max_features=15, max_leaf_nodes=None,
+                max_depth=None, max_features=13, max_leaf_nodes=None,
                 min_impurity_decrease=0.0, min_impurity_split=None,
-                min_samples_leaf=9, min_samples_split=2,
+                min_samples_leaf=3, min_samples_split=2,
                 min_weight_fraction_leaf=0.0, n_estimators=30, n_jobs=1,
                 oob_score=False, random_state=0, verbose=0, warm_start=False)
 
@@ -133,7 +134,7 @@ def k_nearest_neighbor(df_train,df_test):
 
 if __name__ == '__main__':
     # Get Training/testing data
-    df = pd.read_csv('music_downloads/mp3_audio_features_pitch_master.csv')
+    df = pd.read_csv('music_downloads/mp3_song_master_for_RF_KNN_model.csv')
 
     df_train, df_test = validation_test_split_test_train(df)
     print "Train shape: {} Test shape: {}".format(df_train.shape, df_test.shape)
