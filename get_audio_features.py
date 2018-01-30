@@ -10,13 +10,12 @@ import pickle
 from mp3_sampling import song_samples
 from CRNN_ensemble_model import scale_range, crnn
 from RF_KNN_ensemble_model import check_if_lindy, check_if_blues, k_nearest_neighbor
-
+from playlist_generator import generate_playlist
 
 
 def download_mp3_youtube(url):
-    os.system("cd Demo_testing")
     os.system("youtube-dl --extract-audio --audio-format mp3 {}".format(url))
-    os.system("cd ..")
+
 
 def get_mp3_audio_features(filename):
     '''Generates the following for each mp3 song:
@@ -139,7 +138,6 @@ def prep_array(arr):
     # After scaling remove stand scaler Array and redimension
     X = std_and_arr_scaled[1:,:,:]
     X_arr = X.reshape((1,128, 1292,1))
-    print X_arr
     return X_arr
 
 def predict_from_ensamble_model(df_X):
@@ -147,24 +145,36 @@ def predict_from_ensamble_model(df_X):
     blues_rf_model = pickle.load(open('CNN_Models/blues_rf_model.pkl', 'rb'))
     knn_model = pickle.load(open('CNN_Models/knn_model.pkl', 'rb'))
 
-    y_pred_lindy = lindy_rf_model.predict(df_X)
+    blues_cols = ['h_tempo', 'h_beats', 'p_tempo', 'p_beats',
+                  'tempo-differ','duration','slow-tempo-correction', 'rmse mean',
+                  'rmse median', 'rmse std', 'B', 'A#', 'A', 'G#', 'G',
+                  'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
+
+    lindy_cols = ['h_tempo', 'h_beats', 'p_tempo', 'p_beats',
+                      'tempo-differ', 'slow-tempo-correction', 'rmse mean',
+                      'rmse median', 'rmse std', 'B', 'A#', 'A', 'G#', 'G',
+                      'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
+
+    knn_cols = ['h_tempo', 'h_beats', 'p_tempo', 'p_beats', 'rmse mean',
+                      'rmse median', 'rmse std', 'B', 'A#', 'A', 'G#', 'G',
+                      'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
+
+    y_pred_lindy = lindy_rf_model.predict(df_X[lindy_cols])
     df_pred_lindy = pd.DataFrame(y_pred_lindy)
     df_pred_lindy.columns = ['Lindy_?']
 
-    y_pred_blues = blues_rf_model.predict(df_X)
+    y_pred_blues = blues_rf_model.predict(df_X[blues_cols])
     df_pred_blues = pd.DataFrame(y_pred_blues)
     df_pred_blues.columns = ['Blues_?']
 
-    y_pred_knn = knn_model.predict(df_X)
+    y_pred_knn = knn_model.predict(df_X[knn_cols])
     df_pred_knn = pd.DataFrame(y_pred_knn)
     df_pred_knn.columns = ['knn']
 
     # Ensamble Results Table
-    df_results = pd.merge(df_test.reset_index(), y_pred_lindy, how='outer', left_index=True, right_index=True)
-    df_results = pd.merge(df_results, y_pred_blues, how='outer', left_index=True, right_index=True)
-    df_results = pd.merge(df_results, y_pred_knn, how='outer', left_index=True, right_index=True)
+    df_results = pd.merge(df_pred_lindy, df_pred_blues, how='outer', left_index=True, right_index=True)
+    df_results = pd.merge(df_results, df_pred_knn, how='outer', left_index=True, right_index=True)
 
-    df_results = df_results[['filename','Dance style', 'Lindy_?', 'Blues_?','knn']]
 
     df_results['Dance Prediction'] = 0
     for i, (x, y, z) in enumerate(zip(df_results['Lindy_?'], df_results['Blues_?'], df_results['knn'])):
@@ -173,10 +183,12 @@ def predict_from_ensamble_model(df_X):
             df_results['Dance Prediction'].iloc[i] = 'Lindy'
         if y == 1:
             df_results['Dance Prediction'].iloc[i] = 'Blues'
-    print df_results['Dance Prediction']
+
+    return df_results['Dance Prediction'].iloc[0]
 
 
 if __name__ == '__main__':
+    df_songs = pd.read_csv('music_downloads/mp3_song_master_for_RF_KNN_model.csv')
     new = str(raw_input('\nWould you like to sample a new song? (y/n):'))
     if new == 'y':
         url = str(raw_input('Enter url link:'))
@@ -189,7 +201,9 @@ if __name__ == '__main__':
         audio_data, y, sr = get_mp3_audio_features(filename)
         pitch_values = get_mp3_pitch_features(filename, y, sr)
         df_X = create_X_data(audio_data,pitch_values,filename)
-        #predict_from_ensamble_model(df_X)
+        style = predict_from_ensamble_model(df_X)
+        print "\n\nsong: {}\n".format(filename)
+        print "Recommended dance style: ", style, "\n\n"
 
 
 
@@ -201,18 +215,28 @@ if __name__ == '__main__':
         df_pred_crnn = crnn(X_arr)
         y_pred_arr = np.around(np.array(df_pred_crnn),decimals =1)
 
+
         # Print results (up to first 30)
         for i, x in enumerate(y_pred_arr[:30]):
             print "\n\nsong: {}\n".format(wav_filename)
+            print "Recommended dance style: "
             if df_pred_crnn.iloc[i][0] > 0.25:
                 print "Lindy",round(df_pred_crnn.iloc[i][0],2)*100, "%"
+                style = "Lindy"
 
             if df_pred_crnn.iloc[i][1] > 0.25:
                 print "Balboa ",round(df_pred_crnn.iloc[i][1],2)*100, "%"
+                style = "Balboa"
 
             if df_pred_crnn.iloc[i][2] > 0.25:
                 print "Shag", round(df_pred_crnn.iloc[i][2],2)*100, "%"
+                style = "Shag"
 
             if df_pred_crnn.iloc[i][3] > 0.25:
                 print "Charleston", round(df_pred_crnn.iloc[i][3],2)*100, "%"
+                style = "Charleston"
             print "\n\n"
+
+    style_playlist = str(raw_input("Would you like to see a playlist for {} style? (y/n):".format(style)))
+    if style_playlist == 'y':
+        print " \n\n ----  Playlist for {} Dance Style  ----- \n\n {}".format(style, generate_playlist(30,style,df_songs))
