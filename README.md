@@ -9,7 +9,7 @@ LindyList is a music classifier which determines the predominant dance style(s) 
 * Charleston
 * St Louis and Collegiate Shag
 
-![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop")
+![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop 1")
 
 #### Introduction
 Auto-tagging music genre has been explored numerous times in recent years using deep learning. Many of the attempts to classify music focus on a wide variety of music genres. This project embraces some of those music genre classification techniques and applies them to swing music  to tag dance style(s) which can later be used for song discovery and playlist recommendations.
@@ -22,7 +22,11 @@ The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, soci
 This totaled 1376 swing-danceable songs to work with for training and validation testing.
 
 #### Audio Feature Extraction
-From the mp3s I extracted: harmonic & percussive tempo, beats per song, 12 pitch prominence scores, relative root mean square energy from each song for the basic ensemble model. For each song I also generated multiple 30 second samples of the log-power mel-spectrograms for training the convolutional neural network models. The idea was to come up with a basic baseline model to for the neural nets to improve on.
+From the mp3s I extracted: harmonic & percussive tempo, beats per song, 12 pitch prominence scores, relative root mean square energy from each song for the basic ensemble model.
+
+For each song, I also generated multiple 30 second samples of the log-power mel-spectrograms for training the convolutional neural network models. The idea was to come up with a basic baseline model to for the neural nets to improve upon.
+
+![Lindy Hop](img/mel-specs.gif?raw=true "Lindy Hop 1")
 
 #### Classifier Modeling
 Machine learning models were prototyped and compared for best accuracy scores.
@@ -39,7 +43,13 @@ The following neural net models were explored:
 Certain classes were difficult to predict and the slow swing/ drag blues category was eventually left out of the neural net models due to too much variation in the sub-category.
 
 #### Results
-The ensemble model, which consisted of two differently optimized random forest classifiers and one k nearest neighbors classifier achieved 50% accuracy across 5 classes and 60.9% accuracy across 4 classes (when excluding slow swing /drag blues) while 81% was  achieved using a 4-layer deep convolutional recurrent neural network across 4 classes.
+The ensemble model, which consisted of two differently optimized random forest classifiers and one k nearest neighbors classifier achieved 50% accuracy across 5 classes and 60.9% accuracy across 4 classes (when excluding slow swing /drag blues)
+
+![Ensemble Results](img/Ensemble results.png?raw=true "Results Model 1")
+
+... while 81% was  achieved using a 4-layer deep convolutional recurrent neural network across 4 classes.
+
+![CRNN Results](img/CRNN results.png?raw=true "Results Model 2")
 
 ** It worked! Great validation results! Let's build the app! But not so fast... **
 
