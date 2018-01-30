@@ -15,6 +15,7 @@
 /CNN_Models/*
 /processed_data
 /Demo_testing
+/.ipynb_checkpoints
 *.ipynb
 *.mp3
 *.wav
