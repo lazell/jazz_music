@@ -9,6 +9,8 @@ LindyList is a music classifier which determines the predominant dance style(s) 
 * Charleston
 * St Louis and Collegiate Shag
 
+![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop")
+
 #### Introduction
 Auto-tagging music genre has been explored numerous times in recent years using deep learning. Many of the attempts to classify music focus on a wide variety of music genres. This project embraces some of those music genre classification techniques and applies them to swing music  to tag dance style(s) which can later be used for song discovery and playlist recommendations.
 
