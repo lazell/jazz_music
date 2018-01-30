@@ -19,7 +19,7 @@ The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, soci
 #### The Dataset
 3000 unique songs, were randomly selected and downloaded from http://www.jazz-on-line.com/. The music spans a period between 1925-1959. Since dance style labels did not exist for this dataset, I manually labelled dance style tags (yes you read that right, it took me about 50 hours if you're curious). The data includes annotations such as song likeability and recording quality. For this reason the classifier is biased towards my own preferences and ideas about sub-genres in swing music.
 
-This totaled 1376 swing-danceable songs to work with for training and validation testing.
+This totaled *1376* swing-danceable songs to work with for training and validation testing.
 
 #### Audio Feature Extraction
 From the mp3s I extracted: harmonic & percussive tempo, beats per song, 12 pitch prominence scores, relative root mean square energy from each song for the basic ensemble model.
@@ -42,17 +42,21 @@ The following neural net models were explored:
 
 Certain classes were difficult to predict and the slow swing/ drag blues category was eventually left out of the neural net models due to too much variation in the sub-category.
 
-#### Results
+## Results
+
+#### Ensemble Model Results
 The ensemble model, which consisted of two differently optimized random forest classifiers and one k nearest neighbors classifier achieved 50% accuracy across 5 classes and 60.9% accuracy across 4 classes (when excluding slow swing /drag blues)
 
 ![Ensemble Results](img/Ensemble_results.png?raw=true "Results Model 1")
 
+#### Neural Net Model Results
 ... while 81% was  achieved using a 4-layer deep convolutional recurrent neural network across 4 classes.
 
 ![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
 ** It worked! Great validation results! Let's build the app! But not so fast... **
 
+## In the Wild
 #### Problems in Production
 When testing my model with songs sampled from online sources (e.g youtube.com), the effects of compression on the song degraded the contrast in pitch amplitude of the mel-spectrograms compared to the jazz-on-line.com mp3s.
 This resulted in a skewed classification bias towards the mid-tempo dance style, Lindy Hop.
