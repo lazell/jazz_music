@@ -26,7 +26,7 @@ From the mp3s I extracted: harmonic & percussive tempo, beats per song, 12 pitch
 
 For each song, I also generated multiple 30 second samples of the log-power mel-spectrograms for training the convolutional neural network models. The idea was to come up with a basic baseline model to for the neural nets to improve upon.
 
-![Lindy Hop](img/mel-specs.gif?raw=true "Lindy Hop 1")
+![Lindy Hop](img/mel-specs.png?raw=true "Lindy Hop 1")
 
 #### Classifier Modeling
 Machine learning models were prototyped and compared for best accuracy scores.
@@ -45,11 +45,11 @@ Certain classes were difficult to predict and the slow swing/ drag blues categor
 #### Results
 The ensemble model, which consisted of two differently optimized random forest classifiers and one k nearest neighbors classifier achieved 50% accuracy across 5 classes and 60.9% accuracy across 4 classes (when excluding slow swing /drag blues)
 
-![Ensemble Results](img/Ensemble results.png?raw=true "Results Model 1")
+![Ensemble Results](img/Ensemble_results.png?raw=true "Results Model 1")
 
 ... while 81% was  achieved using a 4-layer deep convolutional recurrent neural network across 4 classes.
 
-![CRNN Results](img/CRNN results.png?raw=true "Results Model 2")
+![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
 ** It worked! Great validation results! Let's build the app! But not so fast... **
 
