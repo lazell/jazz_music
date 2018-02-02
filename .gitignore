@@ -19,4 +19,5 @@
 *.ipynb
 *.mp3
 *.wav
+*.pyc
 error.txt
