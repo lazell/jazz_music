@@ -1,3 +1,6 @@
+
+
+![Lindy Hop](img/header.png?raw=true "LindyList")
 ## Lindy List
 ##### Swing Dance Music Classifier
 
@@ -11,14 +14,13 @@ from the five predominant styles:
 * Charleston
 * St Louis and Collegiate Shag
 
-![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop 1")
 
-#### Introduction
+## Introduction
 Auto-tagging music genre has been an active area of deep learning research in recent years. The LindyList, uses many of those same approaches, but instead of classifies by the most suitable style of swing dance from the five most common styles danced today. The prediction(s) can be used as a feature to improve song discovery and quality of of playlist and song recommendations.
 
 The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, social swing dancers and film/TV sound design. Dance-style knowledge would typically be acquired from years of exposure to a variety of jazz music and dances styles. With this project, I intend to make swing music discovery more accessible and engaging from the dancer’s perspective.
 
-#### The Dataset
+### The Dataset
 The data set consists of 3000 unique songs, recorded between 1926-1959. Each was randomly selected
 and downloaded from [Jazz On Line](https://http://www.jazz-on-line.com/), a public domain jazz
 music website. Since labels for dance styles did not exist for
@@ -30,7 +32,7 @@ in swing dancing interpretations. Out of the 3000
 songs, 1376 were “swing-danceable,” and were used for
 training and validation testing.
 
-#### The Approach
+### The Approach
 This project has two components:  the Ensemble
 model and the Neural Net model. To build a baseline to
 model, I first took the Ensemble
@@ -40,14 +42,14 @@ scores, and relative root mean square energy values. I then
 prototyped various machine learning models and compared
 for accuracy:
 
-• Random Forest Classifier
-• Gradient Boosted Classifier
-• K Nearest Neighbors
+* Random Forest Classifier
+* Gradient Boosted Classifier
+* K Nearest Neighbors
 
 From there, I generated multiple 30-second samples of each song and generated the log-power mel-spectrogram arrays to use as training inputs for the artificial neural network models:
 
-• Convolutional Neural Nets
-• Convolutional Recurrent Neural Nets
+* Convolutional Neural Nets
+* Convolutional Recurrent Neural Nets
 
 ![Lindy Hop](img/mel-specs.png?raw=true "Lindy Hop 1")
 
@@ -59,12 +61,12 @@ too much variability in the sub-category.
 
 ## Results
 
-#### Ensemble Model Results
+### Ensemble Model Results
 The ensemble model, which consisted of two differently optimized random forest classifiers and one k nearest neighbors classifier achieved 50% accuracy across 5 classes and 60.9% accuracy across 4 classes (when excluding slow swing /drag blues)
 
 ![Ensemble Results](img/Ensemble_results.png?raw=true "Results Model 1")
 
-#### Neural Net Model Results
+### Neural Net Model Results
 Using a Convolutional Recurrent Neural Network I was able to achieve 81% using a 4-layer deep convolutional recurrent neural network across the same 4 classes.
 
 More importantly, the recall results for individual dance styles had increased to over 52%, with Charleston and Shag styles performing particularly well compared to the ensemble baseline.
@@ -103,3 +105,24 @@ In order for the app to be production ready, the plan is to experiment with diff
 - [playlist_generator.py](https://github.com/lazell/jazz_music/blob/master/playlist_generator.py)  - Generates a 30 minute playlist based on a dance style and labeled songs in the database.
 
 - [swing_band_generator.py](https://github.com/lazell/jazz_music/blob/master/swing_band_generator.py)  - Just for Fun! Generates random jazz-era band name based on artist names in the dataset.
+
+![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop 1")
+
+### References
+
+1. [https://pdfs.semanticscholar.org](https://pdfs.semanticscholar.org/b9ba/8c4a00f5ee43e768db2acc8b56f017176f3e.pdf) AUTOMATIC TAGGING USING DEEP CONVOLUTIONAL NEURAL NETWORKS - Keunwoo Choi, Gyorgy Fazekas, Mark Sandler
+
+2. [http://www.iaeng.org](http://www.iaeng.org/publication/IMECS2010/IMECS2010_pp546-550.pdf) Automatic Musical Pattern Feature Extraction Using Convolutional Neural Network - Tom LH. Li, Antoni B. Chan and Andy HW. Chun
+
+3. [http://music.ece.drexel.edu](http://music.ece.drexel.edu/research/MusicalAttributes/ModelingGenre) Modeling Genre with Musical Attributes - MetLab
+
+4. [https://chatbotslife.com](https://chatbotslife.com/finding-the-genre-of-a-song-with-deep-learning-da8f59a61194) Finding The Genre of a Song Using Deep Learning - AI Odyssey
+
+5. [http://image-net.org/](http://image-net.org/challenges/posters/JKU_EN_RGB_Schwarz_poster.pdf) ELU-Networks:
+ Fast and Accurate CNN Learning on ImageNet - Johannes Kelper University Linz
+
+6. [https://github.com/drscotthawley/audio-classifier-keras-cnn](https://github.com/drscotthawley/audio-classifier-keras-cnn) Audio Classifier Keras using Convolutional Neural Networks - Scott Hawley
+
+7. [https://github.com/meetshah1995/crnn-music-genre-classification](https://github.com/meetshah1995/crnn-music-genre-classification) CRNN Music Genre Classification - Pragnesh Shah
+
+8.
