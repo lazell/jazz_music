@@ -14,7 +14,6 @@ and validates model with reserved test dataset
 '''
 
 
-
 def scale_range(arrays, min_, max_):
     '''
      Standardizes input data between two user specified values
@@ -87,7 +86,7 @@ def crnn(X_test):
 
         OUTPUT: df_pred_crnn :   Dataframe of predictions
                                  (dimensions m x 4) rows in format:
-                                 [Lindy, Balboa, Charleston, Shag, display_text]
+                                 [Lindy, Balboa, Charleston, Shag,display_text]
         '''
 
     # Create CRNN Model from saved json file
