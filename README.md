@@ -1,8 +1,7 @@
 
 
-![Lindy Hop](img/header.png?raw=true "LindyList")
-## Lindy List
-##### Swing Dance Music Classifier
+![Lindy Hop](img/header2.png?raw=true "LindyList")
+## Lindy List - Swing Dance Music Classifier
 
 LindyList is a music classifier that analyzes a jazz-era
 song to determine the most suitable style(s) of swing dance
@@ -15,7 +14,7 @@ from the five predominant styles:
 * St Louis and Collegiate Shag
 
 
-## Introduction
+### Introduction
 Auto-tagging music genre has been an active area of deep learning research in recent years. The LindyList, uses many of those same approaches, but instead of classifies by the most suitable style of swing dance from the five most common styles danced today. The prediction(s) can be used as a feature to improve song discovery and quality of of playlist and song recommendations.
 
 The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, social swing dancers and film/TV sound design. Dance-style knowledge would typically be acquired from years of exposure to a variety of jazz music and dances styles. With this project, I intend to make swing music discovery more accessible and engaging from the dancer’s perspective.
@@ -76,7 +75,7 @@ By using a neural network model, I was able to reduce prediction time to approxi
 ![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
 
-### Real World Testing
+## Real World Testing
 When testing LindyList performance with songs sampled from various online
 sources, I discovered that the effects of compression in
 newer music degraded the contrast in pitch amplitude of the
@@ -124,5 +123,3 @@ In order for the app to be production ready, the plan is to experiment with diff
 6. [https://github.com/drscotthawley/audio-classifier-keras-cnn](https://github.com/drscotthawley/audio-classifier-keras-cnn) Audio Classifier Keras using Convolutional Neural Networks - Scott Hawley
 
 7. [https://github.com/meetshah1995/crnn-music-genre-classification](https://github.com/meetshah1995/crnn-music-genre-classification) CRNN Music Genre Classification - Pragnesh Shah
-
-8.
