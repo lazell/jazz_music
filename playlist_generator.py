@@ -38,8 +38,8 @@ if __name__ == '__main__':
     # Get Metadata CSV file
     df = pd.read_csv('music_downloads/mp3_song_master_for_RF_KNN_model.csv')
 
-    # User plaulist input
-    time_minutes = 30 #30 minuts default
+    # User playlist input
+    time_minutes = 30 #30 minutes default
     Style = str(raw_input("What dance style? (Lindy, Slow_Swing_Blues, Blues, Balboa, Charleston, Shag) :"))
 
     print generate_playlist(time_minutes,Style,df)

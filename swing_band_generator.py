@@ -1,7 +1,14 @@
 
-
 from random import choice
 
+'''
+- - - - - - - - - - - - - - - - - - -
+Jazz-Era Swing Band Name Generator
+- - - - - - - - - - - - - - - - - - -
+
+'''
+
+# Data
 first = '''Glenn Tommy Lionel Cab Bob Sidney Simone Nina Jack Crowder Guy Lillian Sarah Franky Benny
 Lawrence Jack Gene Gertrude Peggy Fitzgerald Raymond Wynonie'''.split()
 
@@ -19,17 +26,25 @@ noun2 = '''and-His-Orchestra and-His-Rhythym and-His-All-Stars Quintent Trio Dwa
 
 def generate_swing_band_name(first,second,adj,noun,noun2):
 
-    name_type1 = "{} {} {} {} {}".format(choice(first), choice(second), choice(title), choice(adj), choice(noun2))
-    name_type2 = "The {} {} {}".format(choice(first), choice(second), choice(noun2))
-    name_type3 = "{} {} and {} {} {}".format(choice(adj), choice(second), choice(title), choice(adj), choice(noun2))
-    short_name1 = "{}'s {}".format(choice(first), choice(adj), choice(noun), choice(noun2))
+    name_type1 = "{} {} {} {} {}".format(choice(first), choice(second),
+                                         choice(title), choice(adj),
+                                         choice(noun2))
+    name_type2 = "The {} {} {}".format(choice(first), choice(second),
+                                       choice(noun2))
+    name_type3 = "{} {} and {} {} {}".format(choice(adj), choice(second),
+                                             choice(title), choice(adj),
+                                             choice(noun2))
+    short_name1 = "{}'s {}".format(choice(first), choice(adj), choice(noun),
+                                   choice(noun2))
     short_name2 = "{} {} {}".format(choice(first), choice(adj), choice(noun))
     short_name3 = "{} {} {}".format(choice(title), choice(adj), choice(noun))
     short_name4 = "{} {} {}".format(choice(adj), choice(title), choice(adj))
 
     model = [name_type1, name_type2, name_type3, short_name1, short_name2, short_name3, short_name4]
-    print '\n----------------------------------------\n', choice(model).replace("-", " "), '\n----------------------------------------'
+    print '----------------------------------------\n'
+    print choice(model).replace("-", " ")
+    print '\n----------------------------------------\n'
 
 if __name__ == '__main__':
-    for i in range(0,20):
+    for i in range(0,5):
         generate_swing_band_name(first,second,adj,noun,noun2), "\n"

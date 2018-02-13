@@ -92,16 +92,14 @@ In order for the app to be production ready, the plan is to experiment with diff
 ##### Watch out for this space!
 
 ### Project Files
-- [CRNN_model.py](https://github.com/lazell/jazz_music/blob/master/CRNN_model.py) - Convolutional recurrent neural network (CRNN) model
+- [CRNN_model.py](https://github.com/lazell/jazz_music/blob/master/CRNN_model.py) - Convolutional recurrent neural network (CRNN) model.
 
-- [CRNN_validation_test.py](https://github.com/lazell/jazz_music/blob/master/CRNN_validation_test.py) - Validates saved trained CRNN model against test data and displays accuracy results
+- [CRNN_validation_test.py](https://github.com/lazell/jazz_music/blob/master/CRNN_validation_test.py) - Validates saved trained CRNN model against test data and displays accuracy results.
 
-- [RF_KNN_enssemble_model.py](https://github.com/lazell/jazz_music/blob/master/RF_KNN_enssemble_model.py)  - Random Forest and KNN Ensemble model (baseline)
+- [RF_KNN_ensemble_model.py](https://github.com/lazell/jazz_music/blob/master/RF_KNN_ensemble_model.py)  - Random Forest and KNN Ensemble model (baseline).
 
-- [get_swing_prediction.py](https://github.com/lazell/jazz_music/blob/master/get_swing_prediction.py)  - Predicts swing dance style for a single song with playlist option for users
+- [get_swing_prediction.py](https://github.com/lazell/jazz_music/blob/master/get_swing_prediction.py)  - Predicts swing dance style for a single song with a predicted dance playlist option.
 
-- [playlist_generator.py](https://github.com/lazell/jazz_music/blob/master/playlist_generator.py)  - Generates a playlist based on a dance style and given playlist duration
+- [playlist_generator.py](https://github.com/lazell/jazz_music/blob/master/playlist_generator.py)  - Generates a 30 minute playlist based on a dance style and labeled songs in the database.
 
-- [swing_band_name_generator.py](https://github.com/lazell/jazz_music/blob/master/swing_band_name_generator.py)  - Just for Fun! Generates Random jazz-era band name based on artist names in the dataset
-
-### References
+- [swing_band_generator.py](https://github.com/lazell/jazz_music/blob/master/swing_band_generator.py)  - Just for Fun! Generates random jazz-era band name based on artist names in the dataset.

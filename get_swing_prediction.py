@@ -113,7 +113,7 @@ def get_mp3_pitch_features(filename, y, sr):
         OUTPUT :
                 - pitch_values : list of 10 extract audio features
 
-    ''''
+    '''
 
     # Get Pitch percentages of song
     chroma = librosa.feature.chroma_cqt(y=y, sr=sr)
@@ -243,8 +243,7 @@ def predict_from_ensamble_model(df_X):
 
 
 if __name__ == '__main__':
-    df_songs = pd.read_csv('''music_downloads/
-                              mp3_song_master_for_RF_KNN_model.csv''')
+    df_songs = pd.read_csv('''music_downloads/mp3_song_master_for_RF_KNN_model.csv''')
 
     filename = "Demo_testing/"+str(raw_input('Enter filepath of mp3:')
                                    )
@@ -290,8 +289,7 @@ if __name__ == '__main__':
                 style = "Charleston"
             print "\n\n"
 
-    style_playlist = str(raw_input('''Would you like to see a playlist for
-                                      {} style? (y/n):'''.format(style)))
+    style_playlist = str(raw_input('Would you like to see a playlist for {} style? (y/n):'.format(style)))
     if style_playlist == 'y':
         print ''' \n\n ----  Playlist for {} Dance Style  -----
                   \n\n {}'''.format(style,
