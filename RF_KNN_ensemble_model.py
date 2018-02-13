@@ -8,6 +8,13 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn import metrics
 import pickle
 
+'''
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Audio Features Ensemble Model (for Lindy, Blues, Balboa, Shag, Charleston)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+'''
+
 
 def validation_test_split_test_train(df):
     ''' Removes 'Nones' from a train/validation dataframe and returns a
@@ -168,9 +175,9 @@ if __name__ == '__main__':
                                          df_results['Blues_?'],
                                          df_results['knn'])):
         # Check Accuracy
-        if (x == 'Lindy') &  (y == 1):
+        if (x == 'Lindy') & (y == 1):
             df_results['Correct Prediction'].iloc[i] = 1
-        if (x == 'Blues') &  (z == 1):
+        if (x == 'Blues') & (z == 1):
             df_results['Correct Prediction'].iloc[i] = 1
         if x == a:
             df_results['Correct Prediction'].iloc[i] = 1
@@ -182,7 +189,6 @@ if __name__ == '__main__':
         if z == 1:
             df_results['Dance Prediction'].iloc[i] = 'Blues'
 
-
     print df_results.describe()
     print "Example predictions:"
-    print df_results[['filename','Dance Prediction']][:30]
+    print df_results[['filename', 'Dance Prediction']][:30]

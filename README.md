@@ -74,10 +74,7 @@ By using a neural network model, I was able to reduce prediction time to approxi
 ![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
 
-#### Files
-
-
-## Real World Testing
+### Real World Testing
 When testing LindyList performance with songs sampled from various online
 sources, I discovered that the effects of compression in
 newer music degraded the contrast in pitch amplitude of the
@@ -92,6 +89,19 @@ To make LindyList more accessible, I plan to develop a mobile app to enable user
 
 In order for the app to be production ready, the plan is to experiment with different pre-processing techniques of the mel-spectrograms to counteract any compression effects and reduce noise in audio samples so that the model generalizes well to any source type (e.g. compressed online mp3s, live recordings from user device).
 
-#### Watch out for this space!
+##### Watch out for this space!
 
-#### References
+### Project Files
+- [CRNN_model.py]() - Convolutional recurrent neural network (CRNN) model
+
+- [CRNN_validation_test.py] - Validates saved trained CRNN model against test data and displays accuracy results
+
+- [RF_KNN_enssemble_model.py] - Random Forest and KNN Ensemble model (baseline)
+
+- [get_swing_prediction.py] - Predicts swing dance style for a single song with playlist option for users
+
+- [playlist_generator.py] - Generates a playlist based on a dance style and given playlist duration
+
+- [swing_band_name_generator.py] - Just for Fun! Generates Random jazz-era band name based on artist names in the dataset
+
+### References

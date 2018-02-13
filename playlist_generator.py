@@ -2,13 +2,14 @@ import pandas as pd
 import numpy as np
 from sklearn.utils import shuffle
 
+'''
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Generate a playlist under a specified time given a dance style
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+'''
 
 def generate_playlist(time_minutes,Style,df):
-    '''
-    Generate a playlist under a specified time given a dance style
-
-    '''
 
     # Conditional Statements
     exclude_poor_quality = ((df['Poor_Quality_Recording'].isnull()) | (df['Poor_Quality_Recording'] == False))
