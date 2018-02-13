@@ -1,6 +1,6 @@
 
 
-![Lindy Hop](img/header2.png?raw=true "LindyList")
+![Lindy Hop](img/header.png?raw=true "LindyList")
 ## Lindy List - Swing Dance Music Classifier
 
 LindyList is a music classifier that analyzes a jazz-era
