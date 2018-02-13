@@ -5,11 +5,16 @@ import urllib2
 import random
 import pause
 
-"""Takes csv file containing links to mp3 download (from 'music_downloads'),
-    filters for duplicate links, generates a uniqueID filename
-    and saves mp3s in 'music_downloads' directory
-    Also returns a loist of dead links to error.txt file"""
+'''
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Download Mp3 From Source
 
+Takes csv file containing links to mp3 download (from 'music_downloads'),
+filters for duplicate links, generates a uniqueID filename
+nd saves mp3s in 'music_downloads' directory
+Also returns a list of dead links to error.txt log file
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+'''
 
 
 def clean_download_list(csv_file):

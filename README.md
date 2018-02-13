@@ -1,7 +1,9 @@
 ## Lindy List
-##### Swing Music Dance Classifier
+##### Swing Dance Music Classifier
 
-LindyList is a music classifier which determines the predominant dance style(s) of a given jazz-era song. Dance styles in scope:
+LindyList is a music classifier that analyzes a jazz-era
+song to determine the most suitable style(s) of swing dance
+from the five predominant styles:
 
 * Lindy Hop
 * Slow Swing/Drag Blues
@@ -12,35 +14,48 @@ LindyList is a music classifier which determines the predominant dance style(s) 
 ![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop 1")
 
 #### Introduction
-Auto-tagging music genre has been explored numerous times in recent years using deep learning. Many of the attempts to classify music focus on a wide variety of music genres. This project embraces some of those music genre classification techniques and applies them to swing music  to tag dance style(s) which can later be used for song discovery and playlist recommendations.
+Auto-tagging music genre has been an active area of deep learning research in recent years. The LindyList, uses many of those same approaches, but instead of classifies by the most suitable style of swing dance from the five most common styles danced today. The prediction(s) can be used as a feature to improve song discovery and quality of of playlist and song recommendations.
 
 The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, social swing dancers and film/TV sound design. Dance-style knowledge would typically be acquired from years of exposure to a variety of jazz music and dances styles. With this project, I intend to make swing music discovery more accessible and engaging from the dancer’s perspective.
 
 #### The Dataset
-3000 unique songs, were randomly selected and downloaded from http://www.jazz-on-line.com/. The music spans a period between 1925-1959. Since dance style labels did not exist for this dataset, I manually labelled dance style tags (yes you read that right, it took me about 50 hours if you're curious). The data includes annotations such as song likeability and recording quality. For this reason the classifier is biased towards my own preferences and ideas about sub-genres in swing music.
+The data set consists of 3000 unique songs, recorded between 1926-1959. Each was randomly selected
+and downloaded from [Jazz On Line](https://http://www.jazz-on-line.com/), a public domain jazz
+music website. Since labels for dance styles did not exist for
+this dataset, I manually labeling songs by dance style and annotating each song with notes on whether a song was swing danceable, whether it
+was particularly infectious, and whether the quality of the
+recording was good. Since I labelled the dataset myself,
+the dataset is undoubtedly biased toward my own
+in swing dancing interpretations. Out of the 3000
+songs, 1376 were “swing-danceable,” and were used for
+training and validation testing.
 
-This totaled *1376* swing-danceable songs to work with for training and validation testing.
+#### The Approach
+This project has two components:  the Ensemble
+model and the Neural Net model. To build a baseline to
+model, I first took the Ensemble
+model approach. I extracting from each song harmonic and;
+percussive tempo, total beat count per song, 12 pitch prominence
+scores, and relative root mean square energy values. I then
+prototyped various machine learning models and compared
+for accuracy:
 
-#### Audio Feature Extraction
-From the mp3s I extracted: harmonic & percussive tempo, beats per song, 12 pitch prominence scores, relative root mean square energy from each song for the basic ensemble model.
+• Random Forest Classifier
+• Gradient Boosted Classifier
+• K Nearest Neighbors
 
-For each song, I also generated multiple 30 second samples of the log-power mel-spectrograms for training the convolutional neural network models. The idea was to come up with a basic baseline model to for the neural nets to improve upon.
+From there, I generated multiple 30-second samples of each song and generated the log-power mel-spectrogram arrays to use as training inputs for the artificial neural network models:
+
+• Convolutional Neural Nets
+• Convolutional Recurrent Neural Nets
 
 ![Lindy Hop](img/mel-specs.png?raw=true "Lindy Hop 1")
 
-#### Classifier Modeling
-Machine learning models were prototyped and compared for best accuracy scores.
+In doing so, I discovered that certain classes were difficult to
+predict and eventually decided to remove the slow
+swing/drag blues category from the neural network models since it had
+too much variability in the sub-category.
 
-The following methods were explored for the baseline ensemble model:
-* Random Forest Classifier
-* Gradient Boosted Classifier
-* K Nearest Neighbors
-
-The following neural net models were explored:
-* Convolutional Neural Nets
-* Convolutional Recurrent Neural Nets
-
-Certain classes were difficult to predict and the slow swing/ drag blues category was eventually left out of the neural net models due to too much variation in the sub-category.
 
 ## Results
 
@@ -50,19 +65,33 @@ The ensemble model, which consisted of two differently optimized random forest c
 ![Ensemble Results](img/Ensemble_results.png?raw=true "Results Model 1")
 
 #### Neural Net Model Results
-... while 81% was  achieved using a 4-layer deep convolutional recurrent neural network across 4 classes.
+Using a Convolutional Recurrent Neural Network I was able to achieve 81% using a 4-layer deep convolutional recurrent neural network across the same 4 classes.
+
+More importantly, the recall results for individual dance styles had increased to over 52%, with Charleston and Shag styles performing particularly well compared to the ensemble baseline.
+
+By using a neural network model, I was able to reduce prediction time to approximately the tenth of the time it takes the ensemble model predict (both times are inclusive of audio pre-processing).
 
 ![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
-** It worked! Great validation results! Let's build the app! But not so fast... **
 
-## In the Wild
-#### Problems in Production
-When testing my model with songs sampled from online sources (e.g youtube.com), the effects of compression on the song degraded the contrast in pitch amplitude of the mel-spectrograms compared to the jazz-on-line.com mp3s.
-This resulted in a skewed classification bias towards the mid-tempo dance style, Lindy Hop.
+#### Files
 
-#### Plans for the Future
-I have plans to incorporate Slow Swing/Drag Blues category into the neural net training and optimize learning rates, activation function parameters appropriately. I also believe auditing the quality of manual labelling for this category may also help since the more specific the better neural nets perform. I intend to experiment with different pre-processing of the mel-spectrograms to counteract the compression effects depending on the source type.
 
-#### Stay tuned for the app!
-My end goal is to have a working web app and mobile app for users to identify song dance style and suggested similar style playlist of songs from the database. Watch out for this space!
+## Real World Testing
+When testing LindyList performance with songs sampled from various online
+sources, I discovered that the effects of compression in
+newer music degraded the contrast in pitch amplitude of the
+mel-spectograms to sufficient degree to skew LindyList
+recommendations toward Lindy Hop, the more mid-tempo
+dance style.
+
+### Plans for the Future
+I have plans to incorporate Slow Swing/Drag Blues category into the neural net by splitting the labels into different sub-genres of blues dancing, since the data exists in the dataset for this level of subcategorization.
+
+To make LindyList more accessible, I plan to develop a mobile app to enable users to identify swing dance styles and suggest playlists of similar style songs from Jazz On Line.
+
+In order for the app to be production ready, the plan is to experiment with different pre-processing techniques of the mel-spectrograms to counteract any compression effects and reduce noise in audio samples so that the model generalizes well to any source type (e.g. compressed online mp3s, live recordings from user device).
+
+#### Watch out for this space!
+
+#### References

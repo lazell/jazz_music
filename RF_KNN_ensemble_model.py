@@ -25,14 +25,15 @@ def check_if_lindy(df_train, df_test):
     ''' Check if audio is Lindy Hop via
         Lindy Hop Optimized Random Forest Classifier Model
 
-        INPUT:  df_train - Dataframe of processed audio features
+        INPUT:  df_train : Dataframe of processed audio features
                           (dimensions n x 22) for training
 
-                df_test - Dataframe of processed audio features to test
-                        (dimensions m x 22) for testing
+                df_test : Dataframe of processed audio features to test
+                          (dimensions m x 22) for testing
 
-        OUTPUT: df_pred_lindy - Dataframe of predictions
-                        (dimensions m x 1) in format 1 = Lindy, 0 = not lindy
+        OUTPUT: df_pred_lindy : Dataframe of predictions
+                               (dimensions m x 1) in format
+                               1 = Lindy, 0 = not lindy
 
     '''
 
@@ -80,7 +81,7 @@ def check_if_blues(df_train,df_test):
         '''
 
     blues_cols = ['h_tempo', 'h_beats', 'p_tempo', 'p_beats',
-                  'tempo-differ','duration','slow-tempo-correction', 'rmse mean',
+                  'tempo-differ','duration','slow-tempo-correction','rmse mean',
                   'rmse median', 'rmse std', 'B', 'A#', 'A', 'G#', 'G',
                   'F#', 'F', 'E', 'D#', 'D', 'C#', 'C']
 
@@ -142,21 +143,30 @@ if __name__ == '__main__':
     df = pd.read_csv('music_downloads/mp3_song_master_for_RF_KNN_model.csv')
 
     df_train, df_test = validation_test_split_test_train(df)
-    print "Train shape: {} Test shape: {}".format(df_train.shape, df_test.shape)
+    print "Train shape: {} Test shape: {}".format(df_train.shape,df_test.shape)
 
     y_pred_lindy = check_if_lindy(df_train, df_test)
     y_pred_blues = check_if_blues(df_train, df_test)
     y_pred_knn = k_nearest_neighbor(df_train, df_test)
 
     # Ensamble Results Table
-    df_results = pd.merge(df_test.reset_index(), y_pred_lindy, how='outer', left_index=True, right_index=True)
-    df_results = pd.merge(df_results, y_pred_blues, how='outer', left_index=True, right_index=True)
-    df_results = pd.merge(df_results, y_pred_knn, how='outer', left_index=True, right_index=True)
-    df_results = df_results[['filename','Dance style', 'Lindy_?', 'Blues_?','knn']]
+    df_results = pd.merge(df_test.reset_index(), y_pred_lindy, how='outer',
+                                                 left_index=True,
+                                                 right_index=True)
+    df_results = pd.merge(df_results, y_pred_blues, how='outer',
+                                                 left_index=True,
+                                                 right_index=True)
+    df_results = pd.merge(df_results, y_pred_knn, how='outer',
+                                                  left_index=True,
+                                                  right_index=True)
+    df_results = df_results[['filename','Dance style','Lindy_?','Blues_?','knn']]
 
     df_results['Correct Prediction'] = 0
     df_results['Dance Prediction'] = 0
-    for i, (x, y, z, a) in enumerate(zip(df_results['Dance style'], df_results['Lindy_?'], df_results['Blues_?'], df_results['knn'])):
+    for i, (x, y, z, a) in enumerate(zip(df_results['Dance style'],
+                                         df_results['Lindy_?'],
+                                         df_results['Blues_?'],
+                                         df_results['knn'])):
         # Check Accuracy
         if (x == 'Lindy') &  (y == 1):
             df_results['Correct Prediction'].iloc[i] = 1
