@@ -99,11 +99,11 @@ In order for the app to be production ready, the plan is to experiment with diff
 
 - [RF_KNN_ensemble_model.py](https://github.com/lazell/jazz_music/blob/master/RF_KNN_ensemble_model.py)  - Random Forest and KNN Ensemble model (baseline).
 
-- [get_swing_prediction.py](https://github.com/lazell/jazz_music/blob/master/get_swing_prediction.py)  - Predicts swing dance style for a single song with a predicted dance playlist option.
+- [get_swing_prediction.py](https://github.com/lazell/jazz_music/blob/master/get_swing_prediction.py)  - Predicts swing dance style for a single song file (mp3) with the option to recommend a dance playlist.
 
-- [playlist_generator.py](https://github.com/lazell/jazz_music/blob/master/playlist_generator.py)  - Generates a 30 minute playlist based on a dance style and labeled songs in the database.
+- [playlist_generator.py](https://github.com/lazell/jazz_music/blob/master/playlist_generator.py)  - Generates a 30 minute playlist based on a dance style with songs in the dataset.
 
-- [swing_band_generator.py](https://github.com/lazell/jazz_music/blob/master/swing_band_generator.py)  - Just for Fun! Generates random jazz-era band name based on artist names in the dataset.
+- [swing_band_generator.py](https://github.com/lazell/jazz_music/blob/master/swing_band_generator.py)  - Just for Fun! Randomlt generates jazz-era style band names based on artist in the dataset.
 
 ![Lindy Hop](img/jean_lindy.gif?raw=true "Lindy Hop 1")
 
