@@ -13,7 +13,7 @@ Web-App for Fetches Convolutional Neural Net model (for Lindy, Balboa, Shag, Cha
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 '''
-from
+from CNN_Models import *
 
 
 app = Flask(__name__)
@@ -32,7 +32,7 @@ def predict():
     # look-up download you tube link
 
     with graph.as_default():
-        out = model.ppredict(x)
+        out = model.predict(x)
         response = np.array_str(np.argmax(out))
         return response
 
