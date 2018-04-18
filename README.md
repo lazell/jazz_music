@@ -15,15 +15,15 @@ from the five predominant styles:
 
 
 ### Introduction
-Auto-tagging music genre has been an active area of deep learning research in recent years. The LindyList, uses many of those same approaches, but instead of classifies by the most suitable style of swing dance from the five most common styles danced today. The prediction(s) can be used as a feature to improve song discovery and quality of of playlist and song recommendations.
+Auto-tagging music genre has been an active area of deep learning research in recent years. The LindyList, uses many of those same approaches, but instead classifies by the most suitable style of swing dance from the five most common styles danced today. The prediction(s) can be used as a feature to improve song discovery and quality of playlist and song recommendations.
 
-The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, social swing dancers and film/TV sound design. Dance-style knowledge would typically be acquired from years of exposure to a variety of jazz music and dances styles. With this project, I intend to make swing music discovery more accessible and engaging from the dancer’s perspective.
+The LindyList is for jazz-era music buffs, jazz musicians, DJs, performers, social swing dancers and film/TV sound design. Dance-style knowledge would typically be acquired from years of exposure to a variety of jazz music and dance styles. With this project, I intend to make swing music discovery more accessible and engaging from the dancer’s perspective.
 
 ### The Dataset
 The data set consists of 3000 unique songs, recorded between 1926-1959. Each was randomly selected
 and downloaded from [Jazz On Line](https://http://www.jazz-on-line.com/), a public domain jazz
 music website. Since labels for dance styles did not exist for
-this dataset, I manually labeling songs by dance style and annotating each song with notes on whether a song was swing danceable, whether it
+this dataset, I manually labelled songs by dance style and annotating each song with notes on whether a song was swing danceable, whether it
 was particularly infectious, and whether the quality of the
 recording was good. Since I labelled the dataset myself,
 the dataset is undoubtedly biased toward my own
@@ -35,7 +35,7 @@ training and validation testing.
 This project has two components:  the Ensemble
 model and the Neural Net model. To build a baseline to
 model, I first took the Ensemble
-model approach. I extracting from each song harmonic and;
+model approach. I extracted from each song harmonic and;
 percussive tempo, total beat count per song, 12 pitch prominence
 scores, and relative root mean square energy values. I then
 prototyped various machine learning models and compared
@@ -70,7 +70,7 @@ Using a Convolutional Recurrent Neural Network I was able to achieve 81% using a
 
 More importantly, the recall results for individual dance styles had increased to over 52%, with Charleston and Shag styles performing particularly well compared to the ensemble baseline.
 
-By using a neural network model, I was able to reduce prediction time to approximately the tenth of the time it takes the ensemble model predict (both times are inclusive of audio pre-processing).
+By using a neural network model, I was able to reduce prediction time to approximately the tenth of the time it takes the ensemble model to predict (both times are inclusive of audio pre-processing).
 
 ![CRNN Results](img/CRNN_results.png?raw=true "Results Model 2")
 
